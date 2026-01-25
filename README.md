@@ -1,4 +1,4 @@
-# Houndoom - Advanced Security Scanner
+# Houndoom - Security Scanner
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Go Version](https://img.shields.io/badge/Go-1.21+-00ADD8?logo=go)](https://golang.org/dl/)
@@ -18,7 +18,7 @@ Houndoom is a high-performance security scanner written in Go for detecting mali
 
 ## HTML Report
 
-Houndoom generates interactive HTML reports with sortable tables, filtering, code highlighting, and statistics dashboard. [View Live Example](http://shishkin.tech/houndoom_example.html)
+Houndoom generates interactive HTML reports with sortable tables, filtering, code highlighting, and statistics dashboard. [View Live Example](https://shishkin.tech/houndoom_example.html)
 
 ![HTML Report Screenshot](docs/images/html_report.png)
 
