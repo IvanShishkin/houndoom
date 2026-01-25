@@ -1,0 +1,270 @@
+signatures:
+  # Backdoors and Web Shells
+  - id: "PHP-001"
+    name: "Base64 Eval Backdoor"
+    description: "Detects base64_decode with eval execution - common backdoor pattern"
+    severity: critical
+    category: php_backdoor
+    pattern: "(?i)eval\\s*\\(\\s*base64_decode"
+    is_regex: true
+    extensions: [php, php3, php4, php5, php7, phtml, pht]
+    level: 0
+
+  - id: "PHP-002"
+    name: "Create Function Backdoor"
+    description: "Detects create_function usage - often used in backdoors"
+    severity: high
+    category: php_backdoor
+    pattern: "\\bcreate_function\\s*\\("
+    is_regex: true
+    extensions: [php, phtml]
+    level: 0
+
+  - id: "PHP-003"
+    name: "Assert Backdoor"
+    description: "Assert function can execute arbitrary code"
+    severity: high
+    category: php_backdoor
+    pattern: "\\bassert\\s*\\(\\s*\\$"
+    is_regex: true
+    extensions: [php]
+    level: 0
+
+  - id: "PHP-004"
+    name: "Eval with Request"
+    description: "Direct eval of user input - critical vulnerability"
+    severity: critical
+    category: php_injection
+    pattern: "eval\\s*\\(\\s*\\$_(GET|POST|REQUEST|COOKIE)"
+    is_regex: true
+    extensions: [php]
+    level: 0
+
+  - id: "PHP-005"
+    name: "System Command Execution"
+    description: "Detects system command execution functions"
+    severity: critical
+    category: php_backdoor
+    pattern: "\\b(system|exec|shell_exec|passthru|popen)\\s*\\("
+    is_regex: true
+    extensions: [php]
+    level: 0
+
+  - id: "PHP-006"
+    name: "FilePutContents with POST"
+    description: "File writing with user input - potential file upload backdoor"
+    severity: high
+    category: php_backdoor
+    pattern: "file_put_contents\\s*\\([^,]+,\\s*\\$_(POST|REQUEST)"
+    is_regex: true
+    extensions: [php]
+    level: 1
+
+  - id: "PHP-007"
+    name: "Preg Replace /e Modifier"
+    description: "Deprecated /e modifier allows code execution"
+    severity: high
+    category: php_injection
+    # Fixed: use [^'"]+ instead of [^/]* to capture full regex pattern including escaped slashes
+    # Require closing quote after modifiers to avoid false positives
+    pattern: "preg_replace\\s*\\(\\s*['\"][/][^'\"]+/[imsxADSUXJu]*e[imsxADSUXJu]*['\"]"
+    is_regex: true
+    extensions: [php]
+    level: 0
+
+  - id: "PHP-008"
+    name: "Call User Func with Variable"
+    description: "Dynamic function call - common in backdoors"
+    severity: medium
+    category: php_suspicious
+    pattern: "call_user_func\\s*\\(\\s*\\$"
+    is_regex: true
+    extensions: [php]
+    level: 1
+
+  - id: "PHP-009"
+    name: "GzInflate Base64"
+    description: "Compressed obfuscated code"
+    severity: high
+    category: php_obfuscated
+    pattern: "gzinflate\\s*\\(\\s*base64_decode"
+    is_regex: true
+    extensions: [php]
+    level: 0
+
+  - id: "PHP-010"
+    name: "StrRot13 Base64"
+    description: "Multiple encoding layers - obfuscation"
+    severity: high
+    category: php_obfuscated
+    pattern: "str_rot13\\s*\\(\\s*base64_decode"
+    is_regex: true
+    extensions: [php]
+    level: 0
+
+  # Common Shell Names
+  - id: "PHP-020"
+    name: "C99 Shell Signature"
+    description: "C99 shell - popular PHP backdoor"
+    severity: critical
+    category: php_shell
+    pattern: "c99sh"
+    is_regex: false
+    extensions: [php]
+    level: 0
+
+  - id: "PHP-021"
+    name: "R57 Shell Signature"
+    description: "R57 shell - popular PHP backdoor"
+    severity: critical
+    category: php_shell
+    pattern: "r57shell"
+    is_regex: false
+    extensions: [php]
+    level: 0
+
+  - id: "PHP-022"
+    name: "WSO Shell Signature"
+    description: "WSO (Web Shell by Orb) backdoor"
+    severity: critical
+    category: php_shell
+    pattern: "wso shell"
+    is_regex: false
+    extensions: [php]
+    level: 0
+
+  - id: "PHP-023"
+    name: "B374k Shell"
+    description: "B374k shell backdoor"
+    severity: critical
+    category: php_shell
+    pattern: "b374k"
+    is_regex: false
+    extensions: [php]
+    level: 0
+
+  # Network Operations
+  - id: "PHP-030"
+    name: "Fsockopen Usage"
+    description: "Network socket operations - can be used for reverse shells"
+    severity: medium
+    category: php_suspicious
+    pattern: "\\bfsockopen\\s*\\("
+    is_regex: true
+    extensions: [php]
+    level: 1
+
+  - id: "PHP-031"
+    name: "Curl Exec with POST"
+    description: "CURL with user input"
+    severity: medium
+    category: php_suspicious
+    pattern: "curl_exec.*\\$_(POST|GET|REQUEST)"
+    is_regex: true
+    extensions: [php]
+    level: 1
+
+  # File Operations
+  - id: "PHP-040"
+    name: "Move Uploaded File"
+    description: "File upload handling - check if properly validated"
+    severity: low
+    category: php_suspicious
+    pattern: "move_uploaded_file"
+    is_regex: false
+    extensions: [php]
+    level: 2
+
+  - id: "PHP-041"
+    name: "Include with Variable"
+    description: "Dynamic include - potential LFI vulnerability"
+    severity: high
+    category: php_injection
+    pattern: "\\b(include|require|include_once|require_once)\\s*\\(\\s*\\$"
+    is_regex: true
+    extensions: [php]
+    level: 1
+
+  # Globals Manipulation
+  - id: "PHP-050"
+    name: "GLOBALS Array Manipulation"
+    description: "Direct GLOBALS manipulation - suspicious"
+    severity: medium
+    category: php_suspicious
+    pattern: "\\$GLOBALS\\s*\\["
+    is_regex: true
+    extensions: [php]
+    level: 1
+
+  # Obfuscation Techniques
+  - id: "PHP-060"
+    name: "Chr Function Chain"
+    description: "Multiple chr() calls - string obfuscation"
+    severity: medium
+    category: php_obfuscated
+    pattern: "chr\\s*\\(\\s*\\d+\\s*\\)\\s*\\.\\s*chr"
+    is_regex: true
+    extensions: [php]
+    level: 1
+
+  - id: "PHP-061"
+    name: "Variable Variables"
+    description: "Variable variables - obfuscation technique"
+    severity: low
+    category: php_suspicious
+    pattern: "$$"
+    is_regex: false
+    extensions: [php]
+    level: 2
+
+  # SQL Injection Patterns
+  - id: "PHP-070"
+    name: "MySQL Query with Request"
+    description: "Direct user input in SQL query - SQL injection risk"
+    severity: high
+    category: php_injection
+    pattern: "mysql_query\\s*\\([^,]*\\$_(GET|POST|REQUEST)"
+    is_regex: true
+    extensions: [php]
+    level: 1
+
+  - id: "PHP-071"
+    name: "MySQLi Query with Request"
+    description: "User input in MySQLi query without preparation"
+    severity: high
+    category: php_injection
+    pattern: "\\$\\w+->query\\s*\\([^,]*\\$_(GET|POST|REQUEST)"
+    is_regex: true
+    extensions: [php]
+    level: 1
+
+  # htaccess Specific
+  - id: "PHP-080"
+    name: "Auto Prepend File"
+    description: "Auto prepend file directive - can inject malicious code"
+    severity: high
+    category: php_backdoor
+    pattern: "auto_prepend_file"
+    is_regex: false
+    extensions: [htaccess]
+    level: 0
+
+  - id: "PHP-081"
+    name: "Auto Append File"
+    description: "Auto append file directive - can inject malicious code"
+    severity: high
+    category: php_backdoor
+    pattern: "auto_append_file"
+    is_regex: false
+    extensions: [htaccess]
+    level: 0
+
+  - id: "PHP-082"
+    name: "AddType PHP Extension"
+    description: "Makes non-PHP files executable as PHP"
+    severity: high
+    category: php_backdoor
+    pattern: "AddType.*application/x-httpd-php"
+    is_regex: true
+    extensions: [htaccess]
+    level: 0

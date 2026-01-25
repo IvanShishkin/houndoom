@@ -1,0 +1,34 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir:*)",
+      "Bash(go mod init:*)",
+      "Bash(ls:*)",
+      "Bash(tree:*)",
+      "Bash(findstr:*)",
+      "Bash(go build:*)",
+      "Bash(D:/projects/sec-scanner/houndoom.exe scan:*)",
+      "Bash(go run:*)",
+      "Bash(\"C:\\\\Users\\\\ivand\\\\AppData\\\\Local\\\\Microsoft\\\\WindowsApps\\\\python3.exe\" \"D:\\\\projects\\\\sec-scanner\\\\tools\\\\extract_signatures.py\")",
+      "Bash(./houndoom.exe scan:*)",
+      "Bash(grep:*)",
+      "Bash(powershell -Command \"Get-Content ''configs/signatures/php_backdoors.yaml'' | Select-String ''[\\\\x00-\\\\x1F]'' | Select-Object -First 5\")",
+      "Bash(./houndoom.exe detectors:*)",
+      "Bash(go test:*)",
+      "Bash(find:*)",
+      "Bash(git checkout:*)",
+      "Bash(make build:*)",
+      "Bash(D:/projects/sec-scanner/bin/houndoom:*)",
+      "Bash(du:*)",
+      "Bash(xargs sed:*)",
+      "Bash(file:*)",
+      "Bash(wsl sed:*)",
+      "Bash(wsl bash:*)",
+      "Bash(xxd:*)",
+      "Bash(go mod tidy:*)",
+      "Bash(./bin/houndoom scan:*)",
+      "Bash(bin/houndoom.exe detectors:*)",
+      "Bash(bin/houndoom.exe:*)"
+    ]
+  }
+}

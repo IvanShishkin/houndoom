@@ -1,0 +1,62 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool
+*.out
+coverage.txt
+coverage.html
+
+# Build directory
+bin/*
+!bin/.gitkeep
+build/
+dist/
+houndoom
+houndoom-*
+ref/*
+ref_bitrix/
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Configuration
+houndoom.yaml
+*.local.yaml
+
+# Reports
+.reports/
+
+# Claude artifacts
+.claude/artifacts/
+
+# Whitelist databases
+*.db
+!houndoom-whitelist.db
+
+# Logs
+*.log
+
+# Temporary files
+tmp/
+temp/
+
+# Go workspace file
+go.work
+
+# Dependencies
+vendor/

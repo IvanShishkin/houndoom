@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TEST: Hidden Links</title>
+</head>
+<body>
+<!-- TEST FILE: Adware hidden links -->
+<!-- This should trigger: adware detector -->
+
+<h1>Normal Page Content</h1>
+
+<!-- Hidden links using display:none -->
+<a href="http://spam-site.com/buy-viagra" style="display:none">Buy Viagra Online</a>
+<a href="http://casino.tk/slots" style="visibility:hidden">Online Casino</a>
+
+<!-- Hidden div with spam links -->
+<div style="display:none;overflow:hidden;height:0">
+    <a href="http://seo-spam.com">SEO Link 1</a>
+    <a href="http://link-farm.com">SEO Link 2</a>
+</div>
+
+<!-- Off-screen positioning -->
+<a href="http://hidden.com" style="position:absolute;left:-9999px">Hidden Link</a>
+
+</body>
+</html>

@@ -1,0 +1,32 @@
+# Houndoom Scanner Configuration Example
+# Copy this file to houndoom.yaml and adjust settings
+
+# Scan settings
+mode: normal  # fast, normal, paranoid
+workers: 8    # Number of parallel workers (0 = auto)
+max_size: 650K
+scan_all_files: false
+scan_delay: 0  # Delay between scans in ms
+exclude:
+  - .git
+  - node_modules
+  - vendor
+  - .svn
+  - .hg
+  - bower_components
+  - __pycache__
+
+# Report settings
+report_format: html  # html, json, text, xml
+no_html: false
+
+# Whitelist settings
+use_whitelist: false
+whitelist_db: whitelist.db
+
+# Deobfuscation settings
+enable_deobfuscation: true
+max_deobfuscate_depth: 100
+
+# Signatures
+signatures_path: configs/signatures

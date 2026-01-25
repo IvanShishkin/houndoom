@@ -1,0 +1,1453 @@
+# Extended malware signatures
+# Note: Patterns with backreferences (\1, \2) are skipped (Go RE2 limitation)
+
+signatures:
+  - id: "ADW-0001"
+    name: "ADW-0001"
+    description: "Malware detection signature ADW-0001"
+    severity: medium
+    category: adware
+    pattern: 'slinks\.su/get_links\.php'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0002"
+    name: "ADW-0002"
+    description: "Malware detection signature ADW-0002"
+    severity: medium
+    category: adware
+    pattern: 'ML_lcode\.php'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0003"
+    name: "ADW-0003"
+    description: "Malware detection signature ADW-0003"
+    severity: medium
+    category: adware
+    pattern: 'ML_%code\.php'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0004"
+    name: "ADW-0004"
+    description: "Malware detection signature ADW-0004"
+    severity: medium
+    category: adware
+    pattern: 'codes\.mainlink\.ru'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0005"
+    name: "ADW-0005"
+    description: "Malware detection signature ADW-0005"
+    severity: medium
+    category: adware
+    pattern: '__linkfeed_robots__'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0006"
+    name: "ADW-0006"
+    description: "Malware detection signature ADW-0006"
+    severity: medium
+    category: adware
+    pattern: 'LINKFEED_USER'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0007"
+    name: "ADW-0007"
+    description: "Malware detection signature ADW-0007"
+    severity: medium
+    category: adware
+    pattern: 'LinkfeedClient'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0008"
+    name: "ADW-0008"
+    description: "Malware detection signature ADW-0008"
+    severity: medium
+    category: adware
+    pattern: '__sape_delimiter__'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0009"
+    name: "ADW-0009"
+    description: "Malware detection signature ADW-0009"
+    severity: medium
+    category: adware
+    pattern: 'dispenser\.articles\.sape\.ru'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0010"
+    name: "ADW-0010"
+    description: "Malware detection signature ADW-0010"
+    severity: medium
+    category: adware
+    pattern: 'LENK_client'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0011"
+    name: "ADW-0011"
+    description: "Malware detection signature ADW-0011"
+    severity: medium
+    category: adware
+    pattern: 'SAPE_client'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0012"
+    name: "ADW-0012"
+    description: "Malware detection signature ADW-0012"
+    severity: medium
+    category: adware
+    pattern: '__linkfeed_end__'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0013"
+    name: "ADW-0013"
+    description: "Malware detection signature ADW-0013"
+    severity: medium
+    category: adware
+    pattern: 'SLArticlesClient'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0014"
+    name: "ADW-0014"
+    description: "Malware detection signature ADW-0014"
+    severity: medium
+    category: adware
+    pattern: 'new\s+LLM_client\(\)'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0015"
+    name: "ADW-0015"
+    description: "Malware detection signature ADW-0015"
+    severity: medium
+    category: adware
+    pattern: 'db\.trustlink\.ru'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0016"
+    name: "ADW-0016"
+    description: "Malware detection signature ADW-0016"
+    severity: medium
+    category: adware
+    pattern: '\$_SERVER\[\s*[''"]HTTP_REFERER[''"]\s*\]\s*,\s*[''"]trustlink\.ru'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0017"
+    name: "ADW-0017"
+    description: "Malware detection signature ADW-0017"
+    severity: medium
+    category: adware
+    pattern: '\$[a-zA-Z0-9_]+\s*=\s*new\s*BS\(\);\s*echo'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0018"
+    name: "ADW-0018"
+    description: "Malware detection signature ADW-0018"
+    severity: medium
+    category: adware
+    pattern: 'class\s+CM_client\s+extends\s*CM_base'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0019"
+    name: "ADW-0019"
+    description: "Malware detection signature ADW-0019"
+    severity: medium
+    category: adware
+    pattern: 'new\s+CM_client\(\)'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0020"
+    name: "ADW-0020"
+    description: "Malware detection signature ADW-0020"
+    severity: medium
+    category: adware
+    pattern: 'tl_links_db_file'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0021"
+    name: "ADW-0021"
+    description: "Malware detection signature ADW-0021"
+    severity: medium
+    category: adware
+    pattern: 'class\s+lmp_base\s+{'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0022"
+    name: "ADW-0022"
+    description: "Malware detection signature ADW-0022"
+    severity: medium
+    category: adware
+    pattern: 'TrustlinkClient'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0023"
+    name: "ADW-0023"
+    description: "Malware detection signature ADW-0023"
+    severity: medium
+    category: adware
+    pattern: '->\s*SLClient'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0024"
+    name: "ADW-0024"
+    description: "Malware detection signature ADW-0024"
+    severity: medium
+    category: adware
+    pattern: 'isset\s*\(?\s*\$_SERVER\s*\[\s*[''"]{0,1}HTTP_USER_AGENT[''"]{0,1}\s*\]\s*\)\s*&&\s*\(?\s*\$_SERVER\s*\[\s*[''"]{0,1}HTTP_USER_AGENT[''"]{0,1}\]\s*==\s*[''"]{0,1}LMP_Robot'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0025"
+    name: "ADW-0025"
+    description: "Malware detection signature ADW-0025"
+    severity: medium
+    category: adware
+    pattern: '\$links->\s*return_links\s*\(?\s*\$lib_path'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0026"
+    name: "ADW-0026"
+    description: "Malware detection signature ADW-0026"
+    severity: medium
+    category: adware
+    pattern: '\$links_class\s*=\s*new\s+Get_links\s*\(?\s*'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0027"
+    name: "ADW-0027"
+    description: "Malware detection signature ADW-0027"
+    severity: medium
+    category: adware
+    pattern: '[''"]{0,1}\s*,\s*[''"]{0,1}\.[''"]{0,1}\s*\)?\s*;\s*\?>'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0028"
+    name: "ADW-0028"
+    description: "Malware detection signature ADW-0028"
+    severity: medium
+    category: adware
+    pattern: '\blevitra'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0029"
+    name: "ADW-0029"
+    description: "Malware detection signature ADW-0029"
+    severity: medium
+    category: adware
+    pattern: '\bdapoxetine'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0030"
+    name: "ADW-0030"
+    description: "Malware detection signature ADW-0030"
+    severity: medium
+    category: adware
+    pattern: '\bviagra'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0031"
+    name: "ADW-0031"
+    description: "Malware detection signature ADW-0031"
+    severity: medium
+    category: adware
+    pattern: '\bcialis'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0032"
+    name: "ADW-0032"
+    description: "Malware detection signature ADW-0032"
+    severity: medium
+    category: adware
+    pattern: '\bprovigil'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0033"
+    name: "ADW-0033"
+    description: "Malware detection signature ADW-0033"
+    severity: medium
+    category: adware
+    pattern: 'class\s+TWeffClient'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0034"
+    name: "ADW-0034"
+    description: "Malware detection signature ADW-0034"
+    severity: medium
+    category: adware
+    pattern: 'new\s+SLClient\(\)'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0035"
+    name: "ADW-0035"
+    description: "Malware detection signature ADW-0035"
+    severity: medium
+    category: adware
+    pattern: '__linkfeed_before_text__'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0036"
+    name: "ADW-0036"
+    description: "Malware detection signature ADW-0036"
+    severity: medium
+    category: adware
+    pattern: '__test_tl_link__'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0037"
+    name: "ADW-0037"
+    description: "Malware detection signature ADW-0037"
+    severity: medium
+    category: adware
+    pattern: 's:11:"lmp_charset"'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0038"
+    name: "ADW-0038"
+    description: "Malware detection signature ADW-0038"
+    severity: medium
+    category: adware
+    pattern: 'lmp_charset'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0039"
+    name: "ADW-0039"
+    description: "Malware detection signature ADW-0039"
+    severity: medium
+    category: adware
+    pattern: '=\s+new\s+MLClient\('
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0040"
+    name: "ADW-0040"
+    description: "Malware detection signature ADW-0040"
+    severity: medium
+    category: adware
+    pattern: 'else\s+if\s*\(\s*\(\s*strpos\(\s*\$links_ip\s*,'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0041"
+    name: "ADW-0041"
+    description: "Malware detection signature ADW-0041"
+    severity: medium
+    category: adware
+    pattern: 'function\s+power_links_block_view'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0042"
+    name: "ADW-0042"
+    description: "Malware detection signature ADW-0042"
+    severity: medium
+    category: adware
+    pattern: 'class\s+INGOTSClient'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0043"
+    name: "ADW-0043"
+    description: "Malware detection signature ADW-0043"
+    severity: medium
+    category: adware
+    pattern: '__LINK__<a'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0044"
+    name: "ADW-0044"
+    description: "Malware detection signature ADW-0044"
+    severity: medium
+    category: adware
+    pattern: 'class\s+Linkpad_start'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0045"
+    name: "ADW-0045"
+    description: "Malware detection signature ADW-0045"
+    severity: medium
+    category: adware
+    pattern: 'class\s+TNX_l'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0046"
+    name: "ADW-0046"
+    description: "Malware detection signature ADW-0046"
+    severity: medium
+    category: adware
+    pattern: 'class\s+MEGAINDEX_base'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0047"
+    name: "ADW-0047"
+    description: "Malware detection signature ADW-0047"
+    severity: medium
+    category: adware
+    pattern: '__LINK____END__'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0048"
+    name: "ADW-0048"
+    description: "Malware detection signature ADW-0048"
+    severity: medium
+    category: adware
+    pattern: 'new\s+TRUSTLINK_client'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0049"
+    name: "ADW-0049"
+    description: "Malware detection signature ADW-0049"
+    severity: medium
+    category: adware
+    pattern: 'r\.php\?id=[a-zA-Z0-9_]+&referer=%{HTTP_HOST}/%{REQUEST_URI}\s+\[R=302,L\]'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0050"
+    name: "ADW-0050"
+    description: "Malware detection signature ADW-0050"
+    severity: medium
+    category: adware
+    pattern: 'User-agent:\s*Googlebot\s*Disallow:\s*/'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0051"
+    name: "ADW-0051"
+    description: "Malware detection signature ADW-0051"
+    severity: medium
+    category: adware
+    pattern: 'new\s+LLM_client\('
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0052"
+    name: "ADW-0052"
+    description: "Malware detection signature ADW-0052"
+    severity: medium
+    category: adware
+    pattern: '&referer=%{HTTP_HOST}/%{REQUEST_URI}'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0053"
+    name: "ADW-0053"
+    description: "Malware detection signature ADW-0053"
+    severity: medium
+    category: adware
+    pattern: '\.php\?id=\$1&%{QUERY_STRING}'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0054"
+    name: "ADW-0054"
+    description: "Malware detection signature ADW-0054"
+    severity: medium
+    category: adware
+    pattern: 'AddType\s+application/x-httpd-php'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0055"
+    name: "ADW-0055"
+    description: "Malware detection signature ADW-0055"
+    severity: medium
+    category: adware
+    pattern: 'AddHandler\s+php-script'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0056"
+    name: "ADW-0056"
+    description: "Malware detection signature ADW-0056"
+    severity: medium
+    category: adware
+    pattern: 'AddHandler\s+cgi-script'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0057"
+    name: "ADW-0057"
+    description: "Malware detection signature ADW-0057"
+    severity: medium
+    category: adware
+    pattern: 'RewriteRule\s+\.\*\s+index\.php\?url=\$0\s+\[L,QSA\]'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0058"
+    name: "ADW-0058"
+    description: "Malware detection signature ADW-0058"
+    severity: medium
+    category: adware
+    pattern: 'phpinfo\(\);'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0059"
+    name: "ADW-0059"
+    description: "Malware detection signature ADW-0059"
+    severity: medium
+    category: adware
+    pattern: '\(msie\|opera\)'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0060"
+    name: "ADW-0060"
+    description: "Malware detection signature ADW-0060"
+    severity: medium
+    category: adware
+    pattern: '<h1>Loading\.\.\.</h1>'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0061"
+    name: "ADW-0061"
+    description: "Malware detection signature ADW-0061"
+    severity: medium
+    category: adware
+    pattern: 'ErrorDocument\s+500\s+http://'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0062"
+    name: "ADW-0062"
+    description: "Malware detection signature ADW-0062"
+    severity: medium
+    category: adware
+    pattern: 'ErrorDocument\s+400\s+http://'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0063"
+    name: "ADW-0063"
+    description: "Malware detection signature ADW-0063"
+    severity: medium
+    category: adware
+    pattern: 'ErrorDocument\s+404\s+http://'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0064"
+    name: "ADW-0064"
+    description: "Malware detection signature ADW-0064"
+    severity: medium
+    category: adware
+    pattern: 'RewriteCond\s*%{HTTP_USER_AGENT}\s*\.\*ndroid\.\*'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0065"
+    name: "ADW-0065"
+    description: "Malware detection signature ADW-0065"
+    severity: medium
+    category: adware
+    pattern: '<script\s+language=[''"]{0,1}JavaScript[''"]{0,1}>\s*parent\.window\.opener\.location\s*=\s*[''"]http://'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0066"
+    name: "ADW-0066"
+    description: "Malware detection signature ADW-0066"
+    severity: medium
+    category: adware
+    pattern: 'chr\s*\(\s*101\s*\)\s*\.\s*chr\s*\(\s*118\s*\)\s*\.\s*chr\s*\(\s*97\s*\)\s*\.\s*chr\s*\(\s*108\s*\)'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0067"
+    name: "ADW-0067"
+    description: "Malware detection signature ADW-0067"
+    severity: medium
+    category: adware
+    pattern: 'curl\.haxx\.se/rfc/cookie_spec'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0068"
+    name: "ADW-0068"
+    description: "Malware detection signature ADW-0068"
+    severity: medium
+    category: adware
+    pattern: 'Joomla_brute_Force'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0069"
+    name: "ADW-0069"
+    description: "Malware detection signature ADW-0069"
+    severity: medium
+    category: adware
+    pattern: 'RewriteCond\s*%{HTTP:x-wap-profile'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0070"
+    name: "ADW-0070"
+    description: "Malware detection signature ADW-0070"
+    severity: medium
+    category: adware
+    pattern: 'RewriteCond\s*%{HTTP:x-operamini-phone-ua}'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0071"
+    name: "ADW-0071"
+    description: "Malware detection signature ADW-0071"
+    severity: medium
+    category: adware
+    pattern: 'RewriteCond\s*%{HTTP:Accept-Language}\s*\(ru\|ru-ru\|uk\)\s*\[NC\]'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0072"
+    name: "ADW-0072"
+    description: "Malware detection signature ADW-0072"
+    severity: medium
+    category: adware
+    pattern: 'slesh\+slesh\+domen\+point'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0073"
+    name: "ADW-0073"
+    description: "Malware detection signature ADW-0073"
+    severity: medium
+    category: adware
+    pattern: 'telefonnaya-baza-'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0074"
+    name: "ADW-0074"
+    description: "Malware detection signature ADW-0074"
+    severity: medium
+    category: adware
+    pattern: 'icq-dlya-telefona-'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0075"
+    name: "ADW-0075"
+    description: "Malware detection signature ADW-0075"
+    severity: medium
+    category: adware
+    pattern: 'page_files/style000\.css'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0076"
+    name: "ADW-0076"
+    description: "Malware detection signature ADW-0076"
+    severity: medium
+    category: adware
+    pattern: 'spravochnik-nomerov-'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0077"
+    name: "ADW-0077"
+    description: "Malware detection signature ADW-0077"
+    severity: medium
+    category: adware
+    pattern: 'Kazan/index\.html'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0078"
+    name: "ADW-0078"
+    description: "Malware detection signature ADW-0078"
+    severity: medium
+    category: adware
+    pattern: 'Googlebot[''"]{0,1}\s*\)\){echo\s+file_get_contents'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0079"
+    name: "ADW-0079"
+    description: "Malware detection signature ADW-0079"
+    severity: medium
+    category: adware
+    pattern: 'index\.php\?id=\$1&%{QUERY'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0080"
+    name: "ADW-0080"
+    description: "Malware detection signature ADW-0080"
+    severity: medium
+    category: adware
+    pattern: 'Volgogradindex\.html'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0081"
+    name: "ADW-0081"
+    description: "Malware detection signature ADW-0081"
+    severity: medium
+    category: adware
+    pattern: 'AddType\s+application/x-httpd-cgi\s+\.'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0082"
+    name: "ADW-0082"
+    description: "Malware detection signature ADW-0082"
+    severity: medium
+    category: adware
+    pattern: '-klych-k-igre\.html'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0083"
+    name: "ADW-0083"
+    description: "Malware detection signature ADW-0083"
+    severity: medium
+    category: adware
+    pattern: 'lmp_client\(strcode'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0084"
+    name: "ADW-0084"
+    description: "Malware detection signature ADW-0084"
+    severity: medium
+    category: adware
+    pattern: '/\?do=kak-udalit-'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0085"
+    name: "ADW-0085"
+    description: "Malware detection signature ADW-0085"
+    severity: medium
+    category: adware
+    pattern: '/\?do=oshibka-'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0086"
+    name: "ADW-0086"
+    description: "Malware detection signature ADW-0086"
+    severity: medium
+    category: adware
+    pattern: '/instruktsiya-dlya-'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0087"
+    name: "ADW-0087"
+    description: "Malware detection signature ADW-0087"
+    severity: medium
+    category: adware
+    pattern: 'content="\d+;URL=https://docs\.google\.com/'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0088"
+    name: "ADW-0088"
+    description: "Malware detection signature ADW-0088"
+    severity: medium
+    category: adware
+    pattern: '%<!--\\s\*\$marker\\s\*-->\.\+\?<!--\\s\*/\$marker\\s\*-->%'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0089"
+    name: "ADW-0089"
+    description: "Malware detection signature ADW-0089"
+    severity: medium
+    category: adware
+    pattern: 'RewriteRule\s+\^\(\.\*\),\(\.\*\)\$\s+\$2\.php\?rewrite_params=\$1&page_url=\$2'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0090"
+    name: "ADW-0090"
+    description: "Malware detection signature ADW-0090"
+    severity: medium
+    category: adware
+    pattern: 'RewriteRule\s*\(\.\+\)\s*index\.php\?s=\$0'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0091"
+    name: "ADW-0091"
+    description: "Malware detection signature ADW-0091"
+    severity: medium
+    category: adware
+    pattern: 'Redirect\s*http://'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0092"
+    name: "ADW-0092"
+    description: "Malware detection signature ADW-0092"
+    severity: medium
+    category: adware
+    pattern: 'RewriteRule\s*\^\(\.\*\)\s*index\.php\?id=\$1'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0093"
+    name: "ADW-0093"
+    description: "Malware detection signature ADW-0093"
+    severity: medium
+    category: adware
+    pattern: 'RewriteRule\s*\^\(\.\*\)\s*index\.php\?m=\$1'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0094"
+    name: "ADW-0094"
+    description: "Malware detection signature ADW-0094"
+    severity: medium
+    category: adware
+    pattern: '\b(percocet|adderall|viagra|cialis|levitra|kaufen|ambien|blue\s+pill|cocaine|marijuana|lipitor|phentermin|pro[sz]ac|sandyauer|tramadol|troyhambyultram|unicauca|valium|vicodin|xanax|ypxaieo)\s+online'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0095"
+    name: "ADW-0095"
+    description: "Malware detection signature ADW-0095"
+    severity: medium
+    category: adware
+    pattern: 'RewriteRule\s*\.\*/\.\*\s*[a-zA-Z0-9_]+\.php\?\$0'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0096"
+    name: "ADW-0096"
+    description: "Malware detection signature ADW-0096"
+    severity: medium
+    category: adware
+    pattern: 'RewriteCond\s+%{REMOTE_ADDR}\s+\^85\.26'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0097"
+    name: "ADW-0097"
+    description: "Malware detection signature ADW-0097"
+    severity: medium
+    category: adware
+    pattern: 'RewriteCond\s+%{REMOTE_ADDR}\s+\^217\.118'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0098"
+    name: "ADW-0098"
+    description: "Malware detection signature ADW-0098"
+    severity: medium
+    category: adware
+    pattern: 'RewriteEngine\s+On\s*RewriteBase\s+/\?[a-zA-Z0-9_]+='
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0099"
+    name: "ADW-0099"
+    description: "Malware detection signature ADW-0099"
+    severity: medium
+    category: adware
+    pattern: 'ErrorDocument\s+404\s+http://tds'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0100"
+    name: "ADW-0100"
+    description: "Malware detection signature ADW-0100"
+    severity: medium
+    category: adware
+    pattern: 'RewriteRule\s+\^\(\.\*\)\$\s+http://\d+\.\d+\.\d+\.'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0101"
+    name: "ADW-0101"
+    description: "Malware detection signature ADW-0101"
+    severity: medium
+    category: adware
+    pattern: '<!--check:[''"]\s*\.\s*md5\(\s*\$_(GET|POST|SERVER|COOKIE|REQUEST|FILES)\['
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0102"
+    name: "ADW-0102"
+    description: "Malware detection signature ADW-0102"
+    severity: medium
+    category: adware
+    pattern: 'RewriteBase\s+/wp-'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0103"
+    name: "ADW-0103"
+    description: "Malware detection signature ADW-0103"
+    severity: medium
+    category: adware
+    pattern: 'SetHandler\s+application/x-httpd-php'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0104"
+    name: "ADW-0104"
+    description: "Malware detection signature ADW-0104"
+    severity: medium
+    category: adware
+    pattern: '%{HTTP_USER_AGENT}\s+!windows-media-player'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0105"
+    name: "ADW-0105"
+    description: "Malware detection signature ADW-0105"
+    severity: medium
+    category: adware
+    pattern: '\(\s*\$_SERVER\[\s*[''"]{0,1}HTTP_USER_AGENT[''"]{0,1}\s*\]\s*,\s*[''"]{0,1}YandexBot'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0106"
+    name: "ADW-0106"
+    description: "Malware detection signature ADW-0106"
+    severity: medium
+    category: adware
+    pattern: '\(\s*\$_SERVER\[\s*[''"]{0,1}HTTP_REFERER[''"]{0,1}\s*\]\s*,\s*[''"]{0,1}yandex'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0107"
+    name: "ADW-0107"
+    description: "Malware detection signature ADW-0107"
+    severity: medium
+    category: adware
+    pattern: '\(\s*\$_SERVER\[\s*[''"]{0,1}HTTP_REFERER[''"]{0,1}\s*\]\s*,\s*[''"]{0,1}google'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0108"
+    name: "ADW-0108"
+    description: "Malware detection signature ADW-0108"
+    severity: medium
+    category: adware
+    pattern: '/kryaki/'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0109"
+    name: "ADW-0109"
+    description: "Malware detection signature ADW-0109"
+    severity: medium
+    category: adware
+    pattern: '\.php\?\$0'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0110"
+    name: "ADW-0110"
+    description: "Malware detection signature ADW-0110"
+    severity: medium
+    category: adware
+    pattern: 'request\.servervariables\([''"]HTTP_USER_AGENT[''"]\)\s*,\s*[''"]Googlebot'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0111"
+    name: "ADW-0111"
+    description: "Malware detection signature ADW-0111"
+    severity: medium
+    category: adware
+    pattern: 'index\.php\?main_page=product_info&products_id=[''"]\s*\.\s*str_replace\([''"]list'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0112"
+    name: "ADW-0112"
+    description: "Malware detection signature ADW-0112"
+    severity: medium
+    category: adware
+    pattern: 'fsockopen\(\s*[''"]shadykit\.com'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0113"
+    name: "ADW-0113"
+    description: "Malware detection signature ADW-0113"
+    severity: medium
+    category: adware
+    pattern: 'eojieu\.cn'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0114"
+    name: "ADW-0114"
+    description: "Malware detection signature ADW-0114"
+    severity: medium
+    category: adware
+    pattern: '>\s*</iframe>\s*<\?php'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0115"
+    name: "ADW-0115"
+    description: "Malware detection signature ADW-0115"
+    severity: medium
+    category: adware
+    pattern: '<meta\s+http-equiv=[''"]{0,1}refresh[''"]{0,1}\s+content=[''"]{0,1}\d+;\s*url=<\?php'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0116"
+    name: "ADW-0116"
+    description: "Malware detection signature ADW-0116"
+    severity: medium
+    category: adware
+    pattern: '<meta\s+http-equiv=[''"]{0,1}Refresh[''"]{0,1}\s+content=[''"]{0,1}\d+;\s*URL=http://'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0117"
+    name: "ADW-0117"
+    description: "Malware detection signature ADW-0117"
+    severity: medium
+    category: adware
+    pattern: '\$fl\s*=\s*"<meta http-equiv=\\"Refresh\\"\s+content=\\"\d+;\s*URL='
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0118"
+    name: "ADW-0118"
+    description: "Malware detection signature ADW-0118"
+    severity: medium
+    category: adware
+    pattern: 'RewriteCond\s*%{HTTP_REFERER}\s*yandex'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0119"
+    name: "ADW-0119"
+    description: "Malware detection signature ADW-0119"
+    severity: medium
+    category: adware
+    pattern: 'RewriteCond\s*%{HTTP_REFERER}\s*google'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0120"
+    name: "ADW-0120"
+    description: "Malware detection signature ADW-0120"
+    severity: medium
+    category: adware
+    pattern: 'Options\s+FollowSymLinks\s+MultiViews\s+Indexes\s+ExecCGI'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0121"
+    name: "ADW-0121"
+    description: "Malware detection signature ADW-0121"
+    severity: medium
+    category: adware
+    pattern: 'google\|yandex\|bot\|rambler'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0122"
+    name: "ADW-0122"
+    description: "Malware detection signature ADW-0122"
+    severity: medium
+    category: adware
+    pattern: 'content=[''"]{0,1}1;URL=cgi-bin\.html\?cmd'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0123"
+    name: "ADW-0123"
+    description: "Malware detection signature ADW-0123"
+    severity: medium
+    category: adware
+    pattern: 'andex\|oogle'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0124"
+    name: "ADW-0124"
+    description: "Malware detection signature ADW-0124"
+    severity: medium
+    category: adware
+    pattern: 'header\(\s*[''"]Refresh:\s*\d+;\s*URL=http://'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0125"
+    name: "ADW-0125"
+    description: "Malware detection signature ADW-0125"
+    severity: medium
+    category: adware
+    pattern: 'Mozilla/5\.0\s*\(compatible;\s*Googlebot/2\.1'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0126"
+    name: "ADW-0126"
+    description: "Malware detection signature ADW-0126"
+    severity: medium
+    category: adware
+    pattern: 'http://www\.bing\.com/search\?q=\$query&pq=\$query'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0127"
+    name: "ADW-0127"
+    description: "Malware detection signature ADW-0127"
+    severity: medium
+    category: adware
+    pattern: 'http://go\.mail\.ru/search\?q=[''"]\.\$query'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0128"
+    name: "ADW-0128"
+    description: "Malware detection signature ADW-0128"
+    severity: medium
+    category: adware
+    pattern: 'http://www\.google\.com/search\?q=[''"]\.\$query\.[''"]&hl=\$lang'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0129"
+    name: "ADW-0129"
+    description: "Malware detection signature ADW-0129"
+    severity: medium
+    category: adware
+    pattern: 'SetHandler\s+application/x-httpd-php'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0130"
+    name: "ADW-0130"
+    description: "Malware detection signature ADW-0130"
+    severity: medium
+    category: adware
+    pattern: 'if\(stripos\(\$ua,[''"]android[''"]\)\s*!==\s*false'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0131"
+    name: "ADW-0131"
+    description: "Malware detection signature ADW-0131"
+    severity: medium
+    category: adware
+    pattern: '(sexy\s+lesbians|cum\s+video|sex\s+video|Anal\s+Fuck|teen\s+sex|fuck\s+video|Beach\s+Nude|woman\s+pussy|sex\s+photo|naked\s+teen|xxx\s+video|teen\s+pic)'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0132"
+    name: "ADW-0132"
+    description: "Malware detection signature ADW-0132"
+    severity: medium
+    category: adware
+    pattern: 'http-equiv=[''"]Content-Language[''"]\s+content=[''"]ja[''"]'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0133"
+    name: "ADW-0133"
+    description: "Malware detection signature ADW-0133"
+    severity: medium
+    category: adware
+    pattern: 'http-equiv=[''"]Content-Language[''"]\s+content=[''"]ch[''"]'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0134"
+    name: "ADW-0134"
+    description: "Malware detection signature ADW-0134"
+    severity: medium
+    category: adware
+    pattern: 'KAPPUSTOBOT'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0135"
+    name: "ADW-0135"
+    description: "Malware detection signature ADW-0135"
+    severity: medium
+    category: adware
+    pattern: 'class\s+lTransmiter{\s*var\s*\$version'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0136"
+    name: "ADW-0136"
+    description: "Malware detection signature ADW-0136"
+    severity: medium
+    category: adware
+    pattern: '\$[a-zA-Z0-9_]+\s*=\s*[''"]/tmp/ssess_'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0137"
+    name: "ADW-0137"
+    description: "Malware detection signature ADW-0137"
+    severity: medium
+    category: adware
+    pattern: 'file_get_contents\(base64_decode\(\$[a-zA-Z0-9_]+\)\.[''"]\?[''"]\.http_build_query\(\$_GET\)'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0138"
+    name: "ADW-0138"
+    description: "Malware detection signature ADW-0138"
+    severity: medium
+    category: adware
+    pattern: 'ini_set\([''"]{0,1}user_agent[''"]\s*,\s*[''"]JSLINKS'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0139"
+    name: "ADW-0139"
+    description: "Malware detection signature ADW-0139"
+    severity: medium
+    category: adware
+    pattern: '\$db->query\([''"]SELECT \* FROM article WHERE url=[''"]\$request'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0140"
+    name: "ADW-0140"
+    description: "Malware detection signature ADW-0140"
+    severity: medium
+    category: adware
+    pattern: '<html\s+lang=[''"]ja[''"]>'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0141"
+    name: "ADW-0141"
+    description: "Malware detection signature ADW-0141"
+    severity: medium
+    category: adware
+    pattern: 'xml:lang=[''"]ja[''"]\s+lang=[''"]ja[''"]'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0142"
+    name: "ADW-0142"
+    description: "Malware detection signature ADW-0142"
+    severity: medium
+    category: adware
+    pattern: 'lang=[''"]ja[''"]>'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0143"
+    name: "ADW-0143"
+    description: "Malware detection signature ADW-0143"
+    severity: medium
+    category: adware
+    pattern: 'strpos\(\$im,[''"]\[/UPD_CONTENT\]'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0144"
+    name: "ADW-0144"
+    description: "Malware detection signature ADW-0144"
+    severity: medium
+    category: adware
+    pattern: '==\s*[''"]index\.php[''"]\)\s*{\s*print\s+file_get_contents\('
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0145"
+    name: "ADW-0145"
+    description: "Malware detection signature ADW-0145"
+    severity: medium
+    category: adware
+    pattern: 'class\s+Fatlink'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0146"
+    name: "ADW-0146"
+    description: "Malware detection signature ADW-0146"
+    severity: medium
+    category: adware
+    pattern: '\$f=file_get_contents\("keys/"\.\$keyf\)'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0147"
+    name: "ADW-0147"
+    description: "Malware detection signature ADW-0147"
+    severity: medium
+    category: adware
+    pattern: 'RewriteRule\s+\^\(\.\*\)\\\.html\$\s+index\.php\s+\[nc\]'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0148"
+    name: "ADW-0148"
+    description: "Malware detection signature ADW-0148"
+    severity: medium
+    category: adware
+    pattern: 'mkdir\([''"]page/[''"]\.mb_substr\(md5\(\$key\)'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0149"
+    name: "ADW-0149"
+    description: "Malware detection signature ADW-0149"
+    severity: medium
+    category: adware
+    pattern: 'elseif \(@\$_GET\[[''"]p[''"]\] == [''"]html[''"]\)'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0150"
+    name: "ADW-0150"
+    description: "Malware detection signature ADW-0150"
+    severity: medium
+    category: adware
+    pattern: 'RewriteRule\s+\^\(\.\*\)\\/\$\s+index\.php\s+RewriteRule\s+\^robots\.txt\$\s+robots\.php'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0151"
+    name: "ADW-0151"
+    description: "Malware detection signature ADW-0151"
+    severity: medium
+    category: adware
+    pattern: 'if\(stripos\(\$_SERVER\[[''"]HTTP_USER_AGENT[''"]\],\s*[''"]Googlebot[''"]\)\s*!==\s*false\){\s*\$url\s*=\s*[''"]http://'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0152"
+    name: "ADW-0152"
+    description: "Malware detection signature ADW-0152"
+    severity: medium
+    category: adware
+    pattern: '\$path_to_dor\s*=\s*"'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0153"
+    name: "ADW-0153"
+    description: "Malware detection signature ADW-0153"
+    severity: medium
+    category: adware
+    pattern: 'strrev\(strtoupper\([''"]tnega_resu_ptth'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0154"
+    name: "ADW-0154"
+    description: "Malware detection signature ADW-0154"
+    severity: medium
+    category: adware
+    pattern: 'file_put_contents\([''"]conf\.php[''"]\s*,\s*[''"]\\n\\\$stoppage'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0155"
+    name: "ADW-0155"
+    description: "Malware detection signature ADW-0155"
+    severity: medium
+    category: adware
+    pattern: 'session_name\([''"]userointerfeiso'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0156"
+    name: "ADW-0156"
+    description: "Malware detection signature ADW-0156"
+    severity: medium
+    category: adware
+    pattern: 'RewriteRule\s*\^\(\[A-Za-z0-9-\]\+\)\.html\$\s*[a-zA-Z0-9_]+\.php\?hl=\$1\s*\[L\]'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0157"
+    name: "ADW-0157"
+    description: "Malware detection signature ADW-0157"
+    severity: medium
+    category: adware
+    pattern: '\$id\s*=\s*\$_REQUEST\[[''"]id[''"]\];\s*\$ch\s*=\s*curl_init\(\);\s*\$url_string'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0158"
+    name: "ADW-0158"
+    description: "Malware detection signature ADW-0158"
+    severity: medium
+    category: adware
+    pattern: '\$pageparse=file_get_contents\("http://www\.ask\.com/web\?q='
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0159"
+    name: "ADW-0159"
+    description: "Malware detection signature ADW-0159"
+    severity: medium
+    category: adware
+    pattern: '<META\s*HTTP-EQUIV=[''"]refresh[''"]\s*CONTENT=[''"]0\.\d+;URL=http'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0160"
+    name: "ADW-0160"
+    description: "Malware detection signature ADW-0160"
+    severity: medium
+    category: adware
+    pattern: 'function\s+redirTimer\(\s*\)\s*{\s*self\.setTimeout'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1
+  - id: "ADW-0161"
+    name: "ADW-0161"
+    description: "Malware detection signature ADW-0161"
+    severity: medium
+    category: adware
+    pattern: 'xml:lang="ja"'
+    is_regex: true
+    extensions: [php, js, html, htm, htaccess]
+    level: 1

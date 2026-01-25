@@ -1,0 +1,220 @@
+signatures:
+  # JavaScript Viruses
+  - id: "JS-001"
+    name: "Obfuscated fromCharCode"
+    description: "String.fromCharCode obfuscation - common in malware"
+    severity: high
+    category: js_obfuscated
+    pattern: "fromCharCode\\s*\\(\\s*\\d+\\s*,\\s*\\d+"
+    is_regex: true
+    extensions: [js, html, htm]
+    level: 0
+
+  - id: "JS-002"
+    name: "Eval with Unescape"
+    description: "eval(unescape()) - obfuscation technique"
+    severity: high
+    category: js_malware
+    pattern: "eval\\s*\\(\\s*unescape"
+    is_regex: true
+    extensions: [js, html]
+    level: 0
+
+  - id: "JS-003"
+    name: "Document Write Script"
+    description: "Dynamic script injection via document.write"
+    severity: medium
+    category: js_suspicious
+    pattern: "document\\.write\\s*\\([^)]*<script"
+    is_regex: true
+    extensions: [js, html, htm]
+    level: 1
+
+  # IFRAME Injections
+  - id: "JS-010"
+    name: "Hidden IFRAME"
+    description: "Hidden iframe with display:none - malware injection"
+    severity: critical
+    category: iframe_injection
+    pattern: "<iframe[^>]*display\\s*:\\s*none"
+    is_regex: true
+    extensions: [html, htm, php]
+    level: 0
+
+  - id: "JS-011"
+    name: "Zero Size IFRAME"
+    description: "Zero-size iframe - hidden malware"
+    severity: critical
+    category: iframe_injection
+    pattern: "<iframe[^>]*(width|height)\\s*=\\s*[\"']?0"
+    is_regex: true
+    extensions: [html, htm, php]
+    level: 0
+
+  - id: "JS-012"
+    name: "Invisible IFRAME"
+    description: "Invisible iframe - visibility:hidden"
+    severity: critical
+    category: iframe_injection
+    pattern: "<iframe[^>]*visibility\\s*:\\s*hidden"
+    is_regex: true
+    extensions: [html, htm]
+    level: 0
+
+  - id: "JS-013"
+    name: "Suspicious IFRAME Source"
+    description: "IFRAME pointing to suspicious domains"
+    severity: high
+    category: iframe_injection
+    pattern: "<iframe[^>]*src\\s*=\\s*[\"']https?://[^/]*\\.(ru|cn|tk|ml|ga)/"
+    is_regex: true
+    extensions: [html, htm, php]
+    level: 1
+
+  # XSS Patterns
+  - id: "JS-020"
+    name: "JavaScript in IMG onerror"
+    description: "JavaScript execution via img onerror"
+    severity: high
+    category: js_malware
+    pattern: "<img[^>]*onerror\\s*="
+    is_regex: true
+    extensions: [html, htm, php]
+    level: 1
+
+  - id: "JS-021"
+    name: "JavaScript in SVG onload"
+    description: "JavaScript in SVG onload event"
+    severity: high
+    category: js_malware
+    pattern: "<svg[^>]*onload\\s*="
+    is_regex: true
+    extensions: [html, htm, svg]
+    level: 1
+
+  # Redirects
+  - id: "JS-030"
+    name: "Suspicious Redirect"
+    description: "JavaScript redirect to external site"
+    severity: medium
+    category: redirect
+    pattern: "(window\\.location|document\\.location)\\s*=\\s*[\"']https?://"
+    is_regex: true
+    extensions: [js, html, htm]
+    level: 1
+
+  - id: "JS-031"
+    name: "Meta Refresh Redirect"
+    description: "Meta refresh redirect"
+    severity: medium
+    category: redirect
+    pattern: "<meta[^>]*http-equiv\\s*=\\s*[\"']refresh[\"'][^>]*url\\s*="
+    is_regex: true
+    extensions: [html, htm, php]
+    level: 1
+
+  # Cookie Stealing
+  - id: "JS-040"
+    name: "Cookie Access"
+    description: "Document.cookie access - potential cookie stealing"
+    severity: medium
+    category: js_suspicious
+    pattern: "document\\.cookie"
+    is_regex: false
+    extensions: [js, html]
+    level: 2
+
+  # Cryptocurrency Miners
+  - id: "JS-050"
+    name: "CoinHive Miner"
+    description: "CoinHive cryptocurrency miner"
+    severity: high
+    category: js_malware
+    pattern: "coinhive"
+    is_regex: false
+    extensions: [js, html]
+    level: 0
+
+  - id: "JS-051"
+    name: "CryptoNight Miner"
+    description: "CryptoNight mining script"
+    severity: high
+    category: js_malware
+    pattern: "cryptonight"
+    is_regex: false
+    extensions: [js]
+    level: 0
+
+  # Suspicious Patterns
+  - id: "JS-060"
+    name: "Base64 in Script"
+    description: "Base64 encoded data in JavaScript"
+    severity: medium
+    category: js_obfuscated
+    pattern: "atob\\s*\\([\"'](?:[A-Za-z0-9+/]{4}){10,}[\"']"
+    is_regex: true
+    extensions: [js, html]
+    level: 1
+
+  - id: "JS-061"
+    name: "Hex Escape Sequences"
+    description: "Multiple hex escape sequences - obfuscation"
+    severity: medium
+    category: js_obfuscated
+    pattern: "(\\\\x[0-9a-fA-F]{2}){10,}"
+    is_regex: true
+    extensions: [js]
+    level: 1
+
+  - id: "JS-062"
+    name: "Unicode Escape Sequences"
+    description: "Multiple unicode escapes - obfuscation"
+    severity: medium
+    category: js_obfuscated
+    pattern: "(\\\\u[0-9a-fA-F]{4}){10,}"
+    is_regex: true
+    extensions: [js]
+    level: 1
+
+  # WebRTC/WebSocket Suspicious
+  - id: "JS-070"
+    name: "WebSocket to IP"
+    description: "WebSocket connection to IP address"
+    severity: medium
+    category: js_suspicious
+    pattern: "new WebSocket\\s*\\(\\s*[\"']wss?://\\d+\\.\\d+\\.\\d+\\.\\d+"
+    is_regex: true
+    extensions: [js]
+    level: 1
+
+  # Fingerprinting
+  - id: "JS-080"
+    name: "Canvas Fingerprinting"
+    description: "Canvas fingerprinting technique"
+    severity: low
+    category: js_suspicious
+    pattern: "canvas.*toDataURL"
+    is_regex: true
+    extensions: [js]
+    level: 2
+
+  # Suspicious Functions
+  - id: "JS-090"
+    name: "setTimeout with String"
+    description: "setTimeout with string argument - eval equivalent"
+    severity: medium
+    category: js_malware
+    pattern: "setTimeout\\s*\\(\\s*[\"']"
+    is_regex: true
+    extensions: [js]
+    level: 1
+
+  - id: "JS-091"
+    name: "setInterval with String"
+    description: "setInterval with string argument - eval equivalent"
+    severity: medium
+    category: js_malware
+    pattern: "setInterval\\s*\\(\\s*[\"']"
+    is_regex: true
+    extensions: [js]
+    level: 1

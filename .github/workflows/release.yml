@@ -1,0 +1,90 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build and Release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.21'
+          cache: true
+
+      - name: Get version from tag
+        id: version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+      - name: Run tests
+        run: go test -v -race ./...
+
+      - name: Build binaries
+        env:
+          VERSION: ${{ steps.version.outputs.VERSION }}
+          CGO_ENABLED: 0
+        run: |
+          LDFLAGS="-s -w -X main.version=${VERSION} -X main.commit=${GITHUB_SHA::7} -X main.buildTime=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+
+          echo "Building linux/amd64..."
+          GOOS=linux GOARCH=amd64 go build -ldflags "$LDFLAGS" -o houndoom-linux-amd64 ./cmd/scanner
+
+          echo "Building linux/arm64..."
+          GOOS=linux GOARCH=arm64 go build -ldflags "$LDFLAGS" -o houndoom-linux-arm64 ./cmd/scanner
+
+      - name: Create archives
+        env:
+          VERSION: ${{ steps.version.outputs.VERSION }}
+        run: |
+          mkdir -p dist
+
+          # Linux amd64
+          mkdir -p tmp/houndoom
+          cp houndoom-linux-amd64 tmp/houndoom/houndoom
+          cp README.md tmp/houndoom/
+          cp LICENSE tmp/houndoom/ 2>/dev/null || true
+          tar -czf dist/houndoom-${VERSION}-linux-amd64.tar.gz -C tmp houndoom
+          rm -rf tmp/houndoom
+
+          # Linux arm64
+          mkdir -p tmp/houndoom
+          cp houndoom-linux-arm64 tmp/houndoom/houndoom
+          cp README.md tmp/houndoom/
+          cp LICENSE tmp/houndoom/ 2>/dev/null || true
+          tar -czf dist/houndoom-${VERSION}-linux-arm64.tar.gz -C tmp houndoom
+          rm -rf tmp/houndoom
+
+      - name: Generate checksums
+        env:
+          VERSION: ${{ steps.version.outputs.VERSION }}
+        run: |
+          cd dist
+          sha256sum houndoom-${VERSION}-*.tar.gz > checksums.txt
+          cat checksums.txt
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Houndoom ${{ steps.version.outputs.VERSION }}
+          draft: false
+          prerelease: ${{ contains(steps.version.outputs.VERSION, '-') }}
+          generate_release_notes: true
+          files: |
+            dist/houndoom-${{ steps.version.outputs.VERSION }}-linux-amd64.tar.gz
+            dist/houndoom-${{ steps.version.outputs.VERSION }}-linux-arm64.tar.gz
+            dist/checksums.txt
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

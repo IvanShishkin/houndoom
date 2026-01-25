@@ -1,0 +1,976 @@
+# Extended malware signatures
+# Note: Patterns with backreferences (\1, \2) are skipped (Go RE2 limitation)
+
+signatures:
+  - id: "PHISH-0001"
+    name: "PHISH-0001"
+    description: "Malware detection signature PHISH-0001"
+    severity: high
+    category: phishing
+    pattern: 'SCAM\s+PAYPAL\s+v'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0002"
+    name: "PHISH-0002"
+    description: "Malware detection signature PHISH-0002"
+    severity: high
+    category: phishing
+    pattern: 'CVV:\s*\$cv'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0003"
+    name: "PHISH-0003"
+    description: "Malware detection signature PHISH-0003"
+    severity: high
+    category: phishing
+    pattern: 'Invalid\s+TVN'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0004"
+    name: "PHISH-0004"
+    description: "Malware detection signature PHISH-0004"
+    severity: high
+    category: phishing
+    pattern: 'Invalid RVN'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0005"
+    name: "PHISH-0005"
+    description: "Malware detection signature PHISH-0005"
+    severity: high
+    category: phishing
+    pattern: 'defaultStatus\s*=\s*[''"]Internet Banking'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0006"
+    name: "PHISH-0006"
+    description: "Malware detection signature PHISH-0006"
+    severity: high
+    category: phishing
+    pattern: '<title>\s*Capitec\s+Internet'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0007"
+    name: "PHISH-0007"
+    description: "Malware detection signature PHISH-0007"
+    severity: high
+    category: phishing
+    pattern: '<title>\s*Investec\s+Online'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0008"
+    name: "PHISH-0008"
+    description: "Malware detection signature PHISH-0008"
+    severity: high
+    category: phishing
+    pattern: 'internet\s+PIN\s+number\s+is\s+required'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0009"
+    name: "PHISH-0009"
+    description: "Malware detection signature PHISH-0009"
+    severity: high
+    category: phishing
+    pattern: '<title>Sars'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0010"
+    name: "PHISH-0010"
+    description: "Malware detection signature PHISH-0010"
+    severity: high
+    category: phishing
+    pattern: '<br>ATM\s+PIN'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0011"
+    name: "PHISH-0011"
+    description: "Malware detection signature PHISH-0011"
+    severity: high
+    category: phishing
+    pattern: 'Confirmation\s+OTP'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0012"
+    name: "PHISH-0012"
+    description: "Malware detection signature PHISH-0012"
+    severity: high
+    category: phishing
+    pattern: '<title>\s*Absa\s+Internet'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0013"
+    name: "PHISH-0013"
+    description: "Malware detection signature PHISH-0013"
+    severity: high
+    category: phishing
+    pattern: '-\s*PayPal\s*</title>'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0014"
+    name: "PHISH-0014"
+    description: "Malware detection signature PHISH-0014"
+    severity: high
+    category: phishing
+    pattern: '<title>\s*Pay\s*Pal'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0015"
+    name: "PHISH-0015"
+    description: "Malware detection signature PHISH-0015"
+    severity: high
+    category: phishing
+    pattern: '-\s*Privati\s*</title>'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0016"
+    name: "PHISH-0016"
+    description: "Malware detection signature PHISH-0016"
+    severity: high
+    category: phishing
+    pattern: '<title>\s*UniCredit'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0017"
+    name: "PHISH-0017"
+    description: "Malware detection signature PHISH-0017"
+    severity: high
+    category: phishing
+    pattern: 'Bank\s+of\s+America'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0018"
+    name: "PHISH-0018"
+    description: "Malware detection signature PHISH-0018"
+    severity: high
+    category: phishing
+    pattern: 'Alibaba&nbsp;Manufacturer'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0019"
+    name: "PHISH-0019"
+    description: "Malware detection signature PHISH-0019"
+    severity: high
+    category: phishing
+    pattern: 'Hong\s+Leong\s+Online'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0020"
+    name: "PHISH-0020"
+    description: "Malware detection signature PHISH-0020"
+    severity: high
+    category: phishing
+    pattern: 'Your\s+account\s+\|\s+Log\s+in'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0021"
+    name: "PHISH-0021"
+    description: "Malware detection signature PHISH-0021"
+    severity: high
+    category: phishing
+    pattern: '<title>\s*Online Banking'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0022"
+    name: "PHISH-0022"
+    description: "Malware detection signature PHISH-0022"
+    severity: high
+    category: phishing
+    pattern: '<title>\s*Online-Banking'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0023"
+    name: "PHISH-0023"
+    description: "Malware detection signature PHISH-0023"
+    severity: high
+    category: phishing
+    pattern: 'Sign\s+in\s+to\s+Yahoo'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0024"
+    name: "PHISH-0024"
+    description: "Malware detection signature PHISH-0024"
+    severity: high
+    category: phishing
+    pattern: 'Yahoo\s*</title>'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0025"
+    name: "PHISH-0025"
+    description: "Malware detection signature PHISH-0025"
+    severity: high
+    category: phishing
+    pattern: 'BANCOLOMBIA'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0026"
+    name: "PHISH-0026"
+    description: "Malware detection signature PHISH-0026"
+    severity: high
+    category: phishing
+    pattern: '<title>\s*Amazon'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0027"
+    name: "PHISH-0027"
+    description: "Malware detection signature PHISH-0027"
+    severity: high
+    category: phishing
+    pattern: '<title>\s*Apple'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0028"
+    name: "PHISH-0028"
+    description: "Malware detection signature PHISH-0028"
+    severity: high
+    category: phishing
+    pattern: '<title>\s*Gmail'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0029"
+    name: "PHISH-0029"
+    description: "Malware detection signature PHISH-0029"
+    severity: high
+    category: phishing
+    pattern: 'Google\s+Accounts\s*</title>'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0030"
+    name: "PHISH-0030"
+    description: "Malware detection signature PHISH-0030"
+    severity: high
+    category: phishing
+    pattern: '<title>\s*Google\s+Secure'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0031"
+    name: "PHISH-0031"
+    description: "Malware detection signature PHISH-0031"
+    severity: high
+    category: phishing
+    pattern: '<title>\s*Merak\s+Mail\s+Server'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0032"
+    name: "PHISH-0032"
+    description: "Malware detection signature PHISH-0032"
+    severity: high
+    category: phishing
+    pattern: '<title>\s*Socket\s+Webmail'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0033"
+    name: "PHISH-0033"
+    description: "Malware detection signature PHISH-0033"
+    severity: high
+    category: phishing
+    pattern: '<title>\s*\[L_QUERY\]'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0034"
+    name: "PHISH-0034"
+    description: "Malware detection signature PHISH-0034"
+    severity: high
+    category: phishing
+    pattern: '<title>\s*ANZ\s+Internet\s+Banking'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0035"
+    name: "PHISH-0035"
+    description: "Malware detection signature PHISH-0035"
+    severity: high
+    category: phishing
+    pattern: 'com\.websterbank\.servlets\.Login'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0036"
+    name: "PHISH-0036"
+    description: "Malware detection signature PHISH-0036"
+    severity: high
+    category: phishing
+    pattern: '<title>\s*Gmail'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0037"
+    name: "PHISH-0037"
+    description: "Malware detection signature PHISH-0037"
+    severity: high
+    category: phishing
+    pattern: '<title>\s*Facebook'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0038"
+    name: "PHISH-0038"
+    description: "Malware detection signature PHISH-0038"
+    severity: high
+    category: phishing
+    pattern: '\d+;URL=https://www\.wellsfargo\.com'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0039"
+    name: "PHISH-0039"
+    description: "Malware detection signature PHISH-0039"
+    severity: high
+    category: phishing
+    pattern: '<title>\s*Wells\s*Fargo'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0040"
+    name: "PHISH-0040"
+    description: "Malware detection signature PHISH-0040"
+    severity: high
+    category: phishing
+    pattern: 'property="og:site_name"\s*content="Facebook"\s*/>'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0041"
+    name: "PHISH-0041"
+    description: "Malware detection signature PHISH-0041"
+    severity: high
+    category: phishing
+    pattern: 'Aes\.Ctr\.decrypt\s*\('
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0042"
+    name: "PHISH-0042"
+    description: "Malware detection signature PHISH-0042"
+    severity: high
+    category: phishing
+    pattern: '<title>\s*Alibaba'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0043"
+    name: "PHISH-0043"
+    description: "Malware detection signature PHISH-0043"
+    severity: high
+    category: phishing
+    pattern: 'Rabobank\s*</title>'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0044"
+    name: "PHISH-0044"
+    description: "Malware detection signature PHISH-0044"
+    severity: high
+    category: phishing
+    pattern: '\$message\s*\.=\s*[''"]{0,1}Password'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0045"
+    name: "PHISH-0045"
+    description: "Malware detection signature PHISH-0045"
+    severity: high
+    category: phishing
+    pattern: '\$CVV2C\s*=\s*\$_(GET|POST|SERVER|COOKIE|REQUEST|FILES)\[\s*[''"]CVV2C'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0046"
+    name: "PHISH-0046"
+    description: "Malware detection signature PHISH-0046"
+    severity: high
+    category: phishing
+    pattern: 'CVV2:\s*\$CVV2'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0047"
+    name: "PHISH-0047"
+    description: "Malware detection signature PHISH-0047"
+    severity: high
+    category: phishing
+    pattern: '\.html\?cmd=login='
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0048"
+    name: "PHISH-0048"
+    description: "Malware detection signature PHISH-0048"
+    severity: high
+    category: phishing
+    pattern: 'Webmail\s*</title>'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0049"
+    name: "PHISH-0049"
+    description: "Malware detection signature PHISH-0049"
+    severity: high
+    category: phishing
+    pattern: '<title>\s*UPC\s+Webmail'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0050"
+    name: "PHISH-0050"
+    description: "Malware detection signature PHISH-0050"
+    severity: high
+    category: phishing
+    pattern: '\.php\?cmd=login='
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0051"
+    name: "PHISH-0051"
+    description: "Malware detection signature PHISH-0051"
+    severity: high
+    category: phishing
+    pattern: '\.htm\?cmd=login='
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0052"
+    name: "PHISH-0052"
+    description: "Malware detection signature PHISH-0052"
+    severity: high
+    category: phishing
+    pattern: '\.swedbank\.se/mdpayacs'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0053"
+    name: "PHISH-0053"
+    description: "Malware detection signature PHISH-0053"
+    severity: high
+    category: phishing
+    pattern: '\.\s*\$_POST\[\s*[''"]cvv'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0054"
+    name: "PHISH-0054"
+    description: "Malware detection signature PHISH-0054"
+    severity: high
+    category: phishing
+    pattern: '<title>\s*LANDESBANK'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0055"
+    name: "PHISH-0055"
+    description: "Malware detection signature PHISH-0055"
+    severity: high
+    category: phishing
+    pattern: 'BY-SP1N0ZA'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0056"
+    name: "PHISH-0056"
+    description: "Malware detection signature PHISH-0056"
+    severity: high
+    category: phishing
+    pattern: 'Security\s+question\s+:\s+[''"]\s*\.\s*\$_POST'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0057"
+    name: "PHISH-0057"
+    description: "Malware detection signature PHISH-0057"
+    severity: high
+    category: phishing
+    pattern: 'if\(\s*file_exists\(\s*\$scam\s*\.\s*\$i'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0058"
+    name: "PHISH-0058"
+    description: "Malware detection signature PHISH-0058"
+    severity: high
+    category: phishing
+    pattern: '<title>\s*Best.tigen'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0059"
+    name: "PHISH-0059"
+    description: "Malware detection signature PHISH-0059"
+    severity: high
+    category: phishing
+    pattern: '<title>\s*LANDESBANK'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0060"
+    name: "PHISH-0060"
+    description: "Malware detection signature PHISH-0060"
+    severity: high
+    category: phishing
+    pattern: 'window\.location\s*=\s*[''"]index\d+?\.php\?cmd=login'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0061"
+    name: "PHISH-0061"
+    description: "Malware detection signature PHISH-0061"
+    severity: high
+    category: phishing
+    pattern: 'window\.location\s*=\s*[''"]index\d+?\.html?\?cmd=login'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0062"
+    name: "PHISH-0062"
+    description: "Malware detection signature PHISH-0062"
+    severity: high
+    category: phishing
+    pattern: '<title>\s*Mail\s*</title>'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0063"
+    name: "PHISH-0063"
+    description: "Malware detection signature PHISH-0063"
+    severity: high
+    category: phishing
+    pattern: 'Sie\s+Ihr\s+Konto\s*</title>'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0064"
+    name: "PHISH-0064"
+    description: "Malware detection signature PHISH-0064"
+    severity: high
+    category: phishing
+    pattern: 'Paypal\s+Konto\s+verifizieren'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0065"
+    name: "PHISH-0065"
+    description: "Malware detection signature PHISH-0065"
+    severity: high
+    category: phishing
+    pattern: '\$_GET\[\s*[''"]cc_country_code'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0066"
+    name: "PHISH-0066"
+    description: "Malware detection signature PHISH-0066"
+    severity: high
+    category: phishing
+    pattern: '<title>Outlook\s+Web\s+Access'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0067"
+    name: "PHISH-0067"
+    description: "Malware detection signature PHISH-0067"
+    severity: high
+    category: phishing
+    pattern: '_CARTASI_'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0068"
+    name: "PHISH-0068"
+    description: "Malware detection signature PHISH-0068"
+    severity: high
+    category: phishing
+    pattern: '<meta\s+http-equiv=[''"]refresh[''"]\s*content="\d+;\s*url=data:text/html;http'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0069"
+    name: "PHISH-0069"
+    description: "Malware detection signature PHISH-0069"
+    severity: high
+    category: phishing
+    pattern: 'can\s*sign\s*in\s*to\s*dropbox'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0070"
+    name: "PHISH-0070"
+    description: "Malware detection signature PHISH-0070"
+    severity: high
+    category: phishing
+    pattern: '\d+;\s*URL=https://www\.google\.com'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0071"
+    name: "PHISH-0071"
+    description: "Malware detection signature PHISH-0071"
+    severity: high
+    category: phishing
+    pattern: 'mail\.ru/settings/security'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0072"
+    name: "PHISH-0072"
+    description: "Malware detection signature PHISH-0072"
+    severity: high
+    category: phishing
+    pattern: 'Location:\s*https://security\.google\.com/settings/security'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0073"
+    name: "PHISH-0073"
+    description: "Malware detection signature PHISH-0073"
+    severity: high
+    category: phishing
+    pattern: '\$ip\s*=\s*getenv\(\s*[''"]REMOTE_ADDR[''"]\s*\);\s*\$message\s*\.='
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0074"
+    name: "PHISH-0074"
+    description: "Malware detection signature PHISH-0074"
+    severity: high
+    category: phishing
+    pattern: 'login\.ec21\.com/'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0075"
+    name: "PHISH-0075"
+    description: "Malware detection signature PHISH-0075"
+    severity: high
+    category: phishing
+    pattern: '\$_(GET|POST|SERVER|COOKIE|REQUEST|FILES)\[[''"]{0,1}cvv[''"]{0,1}\]'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0076"
+    name: "PHISH-0076"
+    description: "Malware detection signature PHISH-0076"
+    severity: high
+    category: phishing
+    pattern: '\$adddate=date\("D M d, Y g:i a"\)'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0077"
+    name: "PHISH-0077"
+    description: "Malware detection signature PHISH-0077"
+    severity: high
+    category: phishing
+    pattern: '\$datamasii=date\("D M d, Y g:i a"\)'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0078"
+    name: "PHISH-0078"
+    description: "Malware detection signature PHISH-0078"
+    severity: high
+    category: phishing
+    pattern: 'https://appleid\.apple\.com'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0079"
+    name: "PHISH-0079"
+    description: "Malware detection signature PHISH-0079"
+    severity: high
+    category: phishing
+    pattern: '-Apple_Result-'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0080"
+    name: "PHISH-0080"
+    description: "Malware detection signature PHISH-0080"
+    severity: high
+    category: phishing
+    pattern: 'AOL\s+Details'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0081"
+    name: "PHISH-0081"
+    description: "Malware detection signature PHISH-0081"
+    severity: high
+    category: phishing
+    pattern: '\$_POST\[\s*[''"]{0,1}eMailAdd[''"]{0,1}\s*\]'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0082"
+    name: "PHISH-0082"
+    description: "Malware detection signature PHISH-0082"
+    severity: high
+    category: phishing
+    pattern: 'base\s+href=[''"]https://login\.live\.com'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0083"
+    name: "PHISH-0083"
+    description: "Malware detection signature PHISH-0083"
+    severity: high
+    category: phishing
+    pattern: '<title>Hotmail\s+Account'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0084"
+    name: "PHISH-0084"
+    description: "Malware detection signature PHISH-0084"
+    severity: high
+    category: phishing
+    pattern: '<!--\s+saved\s+from\s+url=\(\d+\)https://'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0085"
+    name: "PHISH-0085"
+    description: "Malware detection signature PHISH-0085"
+    severity: high
+    category: phishing
+    pattern: 'Bank\s+of\s+Montreal'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0086"
+    name: "PHISH-0086"
+    description: "Malware detection signature PHISH-0086"
+    severity: high
+    category: phishing
+    pattern: 'secure\.tangerine\.ca'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0087"
+    name: "PHISH-0087"
+    description: "Malware detection signature PHISH-0087"
+    severity: high
+    category: phishing
+    pattern: 'bmo\.com/onlinebanking'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0088"
+    name: "PHISH-0088"
+    description: "Malware detection signature PHISH-0088"
+    severity: high
+    category: phishing
+    pattern: 'pm_fp=version&state=1&saveFBC=&FBC_Number'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0089"
+    name: "PHISH-0089"
+    description: "Malware detection signature PHISH-0089"
+    severity: high
+    category: phishing
+    pattern: 'cibconline\.cibc\.com'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0090"
+    name: "PHISH-0090"
+    description: "Malware detection signature PHISH-0090"
+    severity: high
+    category: phishing
+    pattern: 'https://www\.tdcanadatrust\.com'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0091"
+    name: "PHISH-0091"
+    description: "Malware detection signature PHISH-0091"
+    severity: high
+    category: phishing
+    pattern: 'Visited TD BANK:\s*"\.\$ip'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0092"
+    name: "PHISH-0092"
+    description: "Malware detection signature PHISH-0092"
+    severity: high
+    category: phishing
+    pattern: 'window\.location="index\.html\?cmd=login=usmail=check=validate'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0093"
+    name: "PHISH-0093"
+    description: "Malware detection signature PHISH-0093"
+    severity: high
+    category: phishing
+    pattern: '<TITLE>AOL\s*Billing'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0094"
+    name: "PHISH-0094"
+    description: "Malware detection signature PHISH-0094"
+    severity: high
+    category: phishing
+    pattern: '<title>Download Your File</title>'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0095"
+    name: "PHISH-0095"
+    description: "Malware detection signature PHISH-0095"
+    severity: high
+    category: phishing
+    pattern: '<title>Acess\s+PayPal'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0096"
+    name: "PHISH-0096"
+    description: "Malware detection signature PHISH-0096"
+    severity: high
+    category: phishing
+    pattern: 'window\.location\s*=\s*''https://www\.paypal\.com'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0097"
+    name: "PHISH-0097"
+    description: "Malware detection signature PHISH-0097"
+    severity: high
+    category: phishing
+    pattern: 'system/send_ccv\.php'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0098"
+    name: "PHISH-0098"
+    description: "Malware detection signature PHISH-0098"
+    severity: high
+    category: phishing
+    pattern: '\.php\?websrc="\s*\.\s*md5'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0099"
+    name: "PHISH-0099"
+    description: "Malware detection signature PHISH-0099"
+    severity: high
+    category: phishing
+    pattern: '<title>Logging\s+in\s+-\s+&Rho;ay'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0100"
+    name: "PHISH-0100"
+    description: "Malware detection signature PHISH-0100"
+    severity: high
+    category: phishing
+    pattern: '\$blocked_words\s*=\s*array\(\s*[''"]drweb'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0101"
+    name: "PHISH-0101"
+    description: "Malware detection signature PHISH-0101"
+    severity: high
+    category: phishing
+    pattern: 'All\s*for\s*you\s*!\s*Good\s*Boy'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0102"
+    name: "PHISH-0102"
+    description: "Malware detection signature PHISH-0102"
+    severity: high
+    category: phishing
+    pattern: 'Your security is our top priority'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0103"
+    name: "PHISH-0103"
+    description: "Malware detection signature PHISH-0103"
+    severity: high
+    category: phishing
+    pattern: 'tangerine\.ca'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0104"
+    name: "PHISH-0104"
+    description: "Malware detection signature PHISH-0104"
+    severity: high
+    category: phishing
+    pattern: '_POST\[[''"]cvv[''"]\]\s*\.\s*"\\n"'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0105"
+    name: "PHISH-0105"
+    description: "Malware detection signature PHISH-0105"
+    severity: high
+    category: phishing
+    pattern: '<TITLE>IDBI\s*Bank'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0106"
+    name: "PHISH-0106"
+    description: "Malware detection signature PHISH-0106"
+    severity: high
+    category: phishing
+    pattern: '<title> :: Online Verification ::</title>'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0107"
+    name: "PHISH-0107"
+    description: "Malware detection signature PHISH-0107"
+    severity: high
+    category: phishing
+    pattern: 'href="www\.bancosantander\.es'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1
+  - id: "PHISH-0108"
+    name: "PHISH-0108"
+    description: "Malware detection signature PHISH-0108"
+    severity: high
+    category: phishing
+    pattern: 'bank\.westpac\.co\.nz'
+    is_regex: true
+    extensions: [php, html, htm]
+    level: 1

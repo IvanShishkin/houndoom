@@ -1,0 +1,213 @@
+# Bitrix Dangerous Methods Signatures
+# Based on Bitrix XScan static $mehtods array
+# These methods are known to be exploited for RCE, authentication bypass, SQL injection, etc.
+
+signatures:
+  # Authorization Bypass Methods
+  - id: "BITRIX-AUTH-001"
+    name: "Bitrix IM Call Auth Bypass"
+    severity: critical
+    category: php_backdoor
+    pattern: 'Bitrix\\Im\\Call\\Auth::authorizeById'
+    is_regex: false
+    description: "Dangerous Bitrix method that can bypass IM authentication"
+    extensions: [php, php3, php4, php5, php7, phtml, pht, inc]
+    level: 0
+    metadata:
+      cvss: 9.8
+      cwe: "CWE-287"
+      reference: "Bitrix authorization bypass vulnerability"
+
+  - id: "BITRIX-AUTH-002"
+    name: "Bitrix OpenLines Auth Bypass"
+    severity: critical
+    category: php_backdoor
+    pattern: 'Bitrix\\ImOpenLines\\Controller\\Widget\\Filter\\Authorization::authorizeById'
+    is_regex: false
+    description: "Dangerous Bitrix method for OpenLines authentication bypass"
+    extensions: [php, php3, php4, php5, php7, phtml, pht, inc]
+    level: 0
+    metadata:
+      cvss: 9.8
+      cwe: "CWE-287"
+
+  - id: "BITRIX-AUTH-003"
+    name: "Bitrix OpenLines Widget Auth Bypass"
+    severity: critical
+    category: php_backdoor
+    pattern: 'Bitrix\\Imopenlines\\Widget\\Auth::authorizeById'
+    is_regex: false
+    description: "Dangerous Bitrix method for widget authentication bypass"
+    extensions: [php, php3, php4, php5, php7, phtml, pht, inc]
+    level: 0
+    metadata:
+      cvss: 9.8
+      cwe: "CWE-287"
+
+  # Remote Code Execution Methods
+  - id: "BITRIX-RCE-001"
+    name: "Bitrix Sale Delivery Config RCE"
+    severity: critical
+    category: php_backdoor
+    pattern: 'Bitrix\\Sale\\Delivery\\Services\\Automatic::createConfig'
+    is_regex: false
+    description: "RCE vulnerability through delivery service configuration"
+    extensions: [php, php3, php4, php5, php7, phtml, pht, inc]
+    level: 0
+    metadata:
+      cvss: 10.0
+      cwe: "CWE-94"
+      attack_vector: "Configuration injection leading to code execution"
+
+  - id: "BITRIX-RCE-002"
+    name: "CControllerClient RunCommand"
+    severity: critical
+    category: php_backdoor
+    pattern: 'CControllerClient::RunCommand'
+    is_regex: false
+    description: "Allows arbitrary command execution through Bitrix controller"
+    extensions: [php, php3, php4, php5, php7, phtml, pht, inc]
+    level: 0
+    metadata:
+      cvss: 10.0
+      cwe: "CWE-78"
+      attack_vector: "Direct command injection"
+
+  - id: "BITRIX-RCE-003"
+    name: "CMailFilter CheckPHP"
+    severity: critical
+    category: php_backdoor
+    pattern: 'CMailFilter::CheckPHP'
+    is_regex: false
+    description: "Executes PHP code through mail filter"
+    extensions: [php, php3, php4, php5, php7, phtml, pht, inc]
+    level: 0
+    metadata:
+      cvss: 10.0
+      cwe: "CWE-94"
+
+  - id: "BITRIX-RCE-004"
+    name: "CMailFilter DoPHPAction"
+    severity: critical
+    category: php_backdoor
+    pattern: 'CMailFilter::DoPHPAction'
+    is_regex: false
+    description: "Performs PHP actions through mail filter (RCE)"
+    extensions: [php, php3, php4, php5, php7, phtml, pht, inc]
+    level: 0
+    metadata:
+      cvss: 10.0
+      cwe: "CWE-94"
+
+  - id: "BITRIX-RCE-005"
+    name: "CAllSaleBasket ExecuteCallbackFunction"
+    severity: critical
+    category: php_backdoor
+    pattern: 'CAllSaleBasket::ExecuteCallbackFunction'
+    is_regex: false
+    description: "Executes arbitrary callback functions in sale basket"
+    extensions: [php, php3, php4, php5, php7, phtml, pht, inc]
+    level: 0
+    metadata:
+      cvss: 9.8
+      cwe: "CWE-94"
+      attack_vector: "Callback injection"
+
+  - id: "BITRIX-RCE-006"
+    name: "CBPHelper UsersStringToArray"
+    severity: critical
+    category: php_injection
+    pattern: 'CBPHelper::UsersStringToArray'
+    is_regex: false
+    description: "Code injection through business process helper"
+    extensions: [php, php3, php4, php5, php7, phtml, pht, inc]
+    level: 0
+    metadata:
+      cvss: 9.8
+      cwe: "CWE-94"
+
+  # SQL Injection Methods
+  - id: "BITRIX-SQLI-001"
+    name: "CAllSaleOrder PrepareSql"
+    severity: high
+    category: php_injection
+    pattern: 'CAllSaleOrder::PrepareSql'
+    is_regex: false
+    description: "SQL injection vulnerability in sale order preparation"
+    extensions: [php, php3, php4, php5, php7, phtml, pht, inc]
+    level: 0
+    metadata:
+      cvss: 8.6
+      cwe: "CWE-89"
+      attack_vector: "SQL injection"
+
+  # Data Exfiltration Methods
+  - id: "BITRIX-EXFIL-001"
+    name: "Bitrix Sender DataExport"
+    severity: high
+    category: php_suspicious
+    pattern: 'Bitrix\\Sender\\Internals\\DataExport::toCsv'
+    is_regex: false
+    description: "Unauthorized data export to CSV"
+    extensions: [php, php3, php4, php5, php7, phtml, pht, inc]
+    level: 0
+    metadata:
+      cvss: 7.5
+      cwe: "CWE-200"
+      attack_vector: "Information disclosure"
+
+  - id: "BITRIX-EXFIL-002"
+    name: "CSaleHelper getOptionOrImportValues"
+    severity: high
+    category: php_suspicious
+    pattern: 'CSaleHelper::getOptionOrImportValues'
+    is_regex: false
+    description: "Import of potentially dangerous values"
+    extensions: [php, php3, php4, php5, php7, phtml, pht, inc]
+    level: 0
+    metadata:
+      cvss: 7.5
+      cwe: "CWE-502"
+
+  # Arbitrary Method Call
+  - id: "BITRIX-CALL-001"
+    name: "Bitrix Sender QueryController Call"
+    severity: critical
+    category: php_backdoor
+    pattern: 'Bitrix\\Sender\\Internals\\QueryController\\Base::call'
+    is_regex: false
+    description: "Allows arbitrary method calls through query controller"
+    extensions: [php, php3, php4, php5, php7, phtml, pht, inc]
+    level: 0
+    metadata:
+      cvss: 9.8
+      cwe: "CWE-749"
+      attack_vector: "Arbitrary method invocation"
+
+  # REST API Bypass
+  - id: "BITRIX-REST-001"
+    name: "CRestUtil makeAuth"
+    severity: critical
+    category: php_backdoor
+    pattern: 'CRestUtil::makeAuth'
+    is_regex: false
+    description: "REST API authentication bypass"
+    extensions: [php, php3, php4, php5, php7, phtml, pht, inc]
+    level: 0
+    metadata:
+      cvss: 9.8
+      cwe: "CWE-287"
+
+  # JSON Injection
+  - id: "BITRIX-JSON-001"
+    name: "CWebDavTools sendJsonResponse"
+    severity: medium
+    category: php_injection
+    pattern: 'CWebDavTools::sendJsonResponse'
+    is_regex: false
+    description: "Potential JSON injection through WebDAV tools"
+    extensions: [php, php3, php4, php5, php7, phtml, pht, inc]
+    level: 0
+    metadata:
+      cvss: 6.5
+      cwe: "CWE-74"
