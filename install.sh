@@ -308,11 +308,22 @@ main() {
     print_info "Extracting archive..."
     tar -xzf "$archive_path" -C "$tmp_dir"
 
+    # Find the binary (might be in a subdirectory)
+    local binary_src="${tmp_dir}/${BINARY_NAME}"
+    if [ ! -f "$binary_src" ]; then
+        binary_src="${tmp_dir}/${BINARY_NAME}/${BINARY_NAME}"
+    fi
+
+    if [ ! -f "$binary_src" ]; then
+        print_error "Binary not found in archive"
+        exit 1
+    fi
+
     # Install binary
     local install_dir
     install_dir=$(get_install_dir)
     local binary_path="${install_dir}/${BINARY_NAME}"
-    install_binary "${tmp_dir}/${BINARY_NAME}" "$binary_path"
+    install_binary "$binary_src" "$binary_path"
 
     # Check PATH
     check_path "$install_dir"
