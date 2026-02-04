@@ -1,7 +1,10 @@
 # Houndoom - Security Scanner
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Release](https://github.com/IvanShishkin/houndoom/actions/workflows/release.yml/badge.svg)](https://github.com/IvanShishkin/houndoom/actions/workflows/release.yml)
 [![Go Version](https://img.shields.io/badge/Go-1.21+-00ADD8?logo=go)](https://golang.org/dl/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-orange.svg)](https://opensource.org/licenses/MIT)
+
+![Houndoom Banner](docs/images/preview.png)
 
 Houndoom is a high-performance security scanner written in Go for detecting malicious code, vulnerabilities, web shells, and threats in web applications. It combines signature-based detection with advanced heuristic analysis and optional AI-powered threat assessment.
 
