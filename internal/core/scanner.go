@@ -15,6 +15,7 @@ import (
 	"github.com/IvanShishkin/houndoom/internal/detectors/adware"
 	"github.com/IvanShishkin/houndoom/internal/detectors/cms"
 	"github.com/IvanShishkin/houndoom/internal/detectors/cms/bitrix"
+	"github.com/IvanShishkin/houndoom/internal/detectors/cms/wordpress"
 	"github.com/IvanShishkin/houndoom/internal/detectors/doorway"
 	"github.com/IvanShishkin/houndoom/internal/detectors/executable"
 	"github.com/IvanShishkin/houndoom/internal/detectors/javascript"
@@ -295,6 +296,14 @@ func (s *Scanner) initDetectors() error {
 			zap.Int("confidence", detectedCMS.Confidence))
 		bitrixDetector := bitrix.NewBitrixDetector(matcher, sigLevel)
 		s.RegisterDetector(bitrixDetector)
+	}
+
+	// WordPress-specific detectors (conditional based on detection)
+	if detectedCMS.IsWordPress() {
+		s.logger.Info("Registering WordPress CMS detector",
+			zap.Int("confidence", detectedCMS.Confidence))
+		wpDetector := wordpress.NewWordPressDetector(matcher, sigLevel)
+		s.RegisterDetector(wpDetector)
 	}
 
 	// JavaScript Critical detector

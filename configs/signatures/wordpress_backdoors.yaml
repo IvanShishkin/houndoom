@@ -1,0 +1,148 @@
+# WordPress Backdoors & Web Shells Signatures
+# Detects fake WP files, eval/base64 injection in themes, remote code inclusion,
+# fake plugins, and hidden admin creation backdoors
+
+signatures:
+  # Fake WordPress files (commonly planted by attackers)
+  - id: "WP-BACKDOOR-001"
+    name: "Fake wp-xmlrpc.php File"
+    description: "Suspicious wp-xmlrpc.php file - commonly used as backdoor (legitimate file is xmlrpc.php)"
+    severity: critical
+    category: php_backdoor
+    pattern: "wp-xmlrpc\\.php"
+    is_regex: true
+    extensions: [php, php3, php4, php5, php7, phtml, pht]
+    level: 0
+    enabled: true
+
+  - id: "WP-BACKDOOR-002"
+    name: "Fake wp-cron-jobs.php File"
+    description: "Suspicious wp-cron-jobs.php - not a legitimate WordPress core file"
+    severity: critical
+    category: php_backdoor
+    pattern: "wp-cron-jobs\\.php"
+    is_regex: true
+    extensions: [php, php3, php4, php5, php7, phtml, pht]
+    level: 0
+    enabled: true
+
+  - id: "WP-BACKDOOR-003"
+    name: "WP-VCD Backdoor File"
+    description: "wp-vcd.php is a known malware family backdoor file"
+    severity: critical
+    category: php_backdoor
+    pattern: "wp-vcd\\.php"
+    is_regex: true
+    extensions: [php, php3, php4, php5, php7, phtml, pht]
+    level: 0
+    enabled: true
+
+  - id: "WP-BACKDOOR-004"
+    name: "Eval Base64 in Theme File"
+    description: "Base64 encoded eval execution in WordPress theme file - common backdoor technique"
+    severity: critical
+    category: php_backdoor
+    pattern: "(?i)eval\\s*\\(\\s*base64_decode\\s*\\("
+    is_regex: true
+    extensions: [php, php3, php4, php5, php7, phtml, pht]
+    level: 0
+    enabled: true
+
+  - id: "WP-BACKDOOR-005"
+    name: "Remote Code Inclusion in wp-config"
+    description: "Remote file inclusion or URL-based require/include in wp-config.php context"
+    severity: critical
+    category: php_backdoor
+    pattern: "(?i)(include|require|include_once|require_once)\\s*\\(?\\s*['\"]https?://"
+    is_regex: true
+    extensions: [php, php3, php4, php5, php7, phtml, pht]
+    level: 0
+    enabled: true
+
+  - id: "WP-BACKDOOR-006"
+    name: "Hidden Admin User Creation Backdoor"
+    description: "Code creates WordPress admin user with hardcoded credentials - backdoor indicator"
+    severity: critical
+    category: php_backdoor
+    pattern: "(?i)wp_create_user\\s*\\([^)]*\\)\\s*;[\\s\\S]{0,200}set_role\\s*\\(\\s*['\"]administrator['\"]"
+    is_regex: true
+    extensions: [php, php3, php4, php5, php7, phtml, pht]
+    level: 0
+    enabled: true
+
+  - id: "WP-BACKDOOR-007"
+    name: "Fake Single-File Plugin with Shell"
+    description: "Single-file plugin with Plugin Name header containing shell execution functions"
+    severity: critical
+    category: php_shell
+    pattern: "(?i)Plugin Name\\s*:.*\\n[\\s\\S]{0,500}(system|passthru|shell_exec|exec|popen)\\s*\\("
+    is_regex: true
+    extensions: [php, php3, php4, php5, php7, phtml, pht]
+    level: 0
+    enabled: true
+
+  - id: "WP-BACKDOOR-008"
+    name: "Eval with POST/GET/REQUEST Input"
+    description: "Direct eval of user-supplied input - critical backdoor pattern"
+    severity: critical
+    category: php_backdoor
+    pattern: "(?i)eval\\s*\\(\\s*\\$_(POST|GET|REQUEST|COOKIE)\\s*\\["
+    is_regex: true
+    extensions: [php, php3, php4, php5, php7, phtml, pht]
+    level: 0
+    enabled: true
+
+  - id: "WP-BACKDOOR-009"
+    name: "WordPress wp-tmp.php Backdoor"
+    description: "wp-tmp.php is a known backdoor file associated with wp-vcd malware"
+    severity: critical
+    category: php_backdoor
+    pattern: "wp-tmp\\.php"
+    is_regex: true
+    extensions: [php, php3, php4, php5, php7, phtml, pht]
+    level: 0
+    enabled: true
+
+  - id: "WP-BACKDOOR-010"
+    name: "WordPress wp-feed.php Backdoor"
+    description: "wp-feed.php is a known backdoor file associated with wp-vcd malware"
+    severity: critical
+    category: php_backdoor
+    pattern: "wp-feed\\.php"
+    is_regex: true
+    extensions: [php, php3, php4, php5, php7, phtml, pht]
+    level: 0
+    enabled: true
+
+  - id: "WP-BACKDOOR-011"
+    name: "Fake Plugin with Eval Backdoor"
+    description: "File with WordPress Plugin Name header containing eval/assert backdoor"
+    severity: critical
+    category: php_backdoor
+    pattern: "(?i)Plugin Name\\s*:.*\\n[\\s\\S]{0,500}(eval|assert|create_function)\\s*\\("
+    is_regex: true
+    extensions: [php, php3, php4, php5, php7, phtml, pht]
+    level: 0
+    enabled: true
+
+  - id: "WP-BACKDOOR-012"
+    name: "Gzinflate Base64 Obfuscated Backdoor"
+    description: "Gzinflate + base64_decode obfuscation chain commonly used in WordPress backdoors"
+    severity: critical
+    category: php_backdoor
+    pattern: "(?i)eval\\s*\\(\\s*gzinflate\\s*\\(\\s*base64_decode"
+    is_regex: true
+    extensions: [php, php3, php4, php5, php7, phtml, pht]
+    level: 0
+    enabled: true
+
+  - id: "WP-BACKDOOR-013"
+    name: "Preg Replace with Eval Modifier"
+    description: "preg_replace with /e modifier for code execution - deprecated but still used in backdoors"
+    severity: high
+    category: php_backdoor
+    pattern: "(?i)preg_replace\\s*\\(\\s*['\"][^'\"]*\\/[a-z]*e[a-z]*['\"]"
+    is_regex: true
+    extensions: [php, php3, php4, php5, php7, phtml, pht]
+    level: 1
+    enabled: true
