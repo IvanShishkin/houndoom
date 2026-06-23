@@ -1,12 +1,18 @@
-# WordPress Vulnerability Signatures
-# Detects dangerous API usage, SQL injection, SSRF, auth bypass,
-# malicious hooks/filters, and unsafe option manipulation
+# WordPress Vulnerability-Pattern Signatures
+# Detects dangerous API usage that leads to exploitation: SQL injection via
+# wpdb, SSRF via the WP HTTP API, unsafe option manipulation, auth/privilege
+# escalation, malicious hooks/filters, REST API abuse, wp-cron RCE and
+# nonce-less AJAX handlers.
+#
+# These describe vulnerability *patterns* (API misuse), not malware. They are
+# the primary false-positive source and are suppressed by the detector on
+# WordPress core files and on managed plugins (caching/membership/forms/backup).
 
 signatures:
-  # SQL Injection via wpdb
+  # ---------------------------------------------------------------- SQL injection
   - id: "WP-SQLI-001"
     name: "SQL Injection via wpdb->query with User Input"
-    description: "Direct use of $wpdb->query() with unsanitized $_GET/$_POST/$_REQUEST - SQL injection risk"
+    description: "$wpdb->query() with unsanitized $_GET/$_POST/$_REQUEST - SQL injection"
     severity: critical
     category: php_injection
     pattern: "(?i)\\$wpdb\\s*->\\s*query\\s*\\([^)]*\\$_(GET|POST|REQUEST)\\s*\\["
@@ -16,20 +22,53 @@ signatures:
     enabled: true
 
   - id: "WP-SQLI-002"
-    name: "SQL Injection via wpdb->query without Prepare"
-    description: "Direct string concatenation in $wpdb->query() without prepare() - potential SQL injection"
+    name: "SQL Injection via wpdb->query Concatenation"
+    description: "String concatenation in $wpdb->query() without prepare() - SQL injection"
     severity: high
     category: php_injection
-    pattern: "(?i)\\$wpdb\\s*->\\s*query\\s*\\(\\s*[\"'][^\"']*\\s*\\.\\s*\\$"
+    pattern: "(?i)\\$wpdb\\s*->\\s*query\\s*\\(\\s*['\"][^'\"]*['\"]\\s*\\.\\s*\\$"
     is_regex: true
     extensions: [php, php3, php4, php5, php7, phtml, pht]
     level: 1
     enabled: true
 
-  # SSRF via wp_remote_get/post
+  - id: "WP-SQLI-003"
+    name: "SQL Injection via wpdb->get_results Concatenation"
+    description: "Concatenation in $wpdb->get_results() without prepare() - SQL injection"
+    severity: high
+    category: php_injection
+    pattern: "(?i)\\$wpdb\\s*->\\s*get_results\\s*\\(\\s*['\"][^'\"]*['\"]\\s*\\.\\s*\\$"
+    is_regex: true
+    extensions: [php, php3, php4, php5, php7, phtml, pht]
+    level: 1
+    enabled: true
+
+  - id: "WP-SQLI-004"
+    name: "SQL Injection via wpdb->get_var/get_row Concatenation"
+    description: "Concatenation in $wpdb->get_var/get_row/get_col without prepare() - SQL injection"
+    severity: high
+    category: php_injection
+    pattern: "(?i)\\$wpdb\\s*->\\s*(get_var|get_row|get_col)\\s*\\(\\s*['\"][^'\"]*['\"]\\s*\\.\\s*\\$"
+    is_regex: true
+    extensions: [php, php3, php4, php5, php7, phtml, pht]
+    level: 1
+    enabled: true
+
+  - id: "WP-SQLI-005"
+    name: "LIKE Clause Interpolation"
+    description: "User input interpolated directly into a SQL LIKE clause - SQL injection"
+    severity: medium
+    category: php_injection
+    pattern: "(?i)LIKE\\s+['\"]%?\\{?\\$_(GET|POST|REQUEST)"
+    is_regex: true
+    extensions: [php, php3, php4, php5, php7, phtml, pht]
+    level: 1
+    enabled: true
+
+  # ---------------------------------------------------------------- SSRF
   - id: "WP-SSRF-001"
     name: "SSRF via wp_remote_get with User Input"
-    description: "wp_remote_get() with user-controlled URL - server-side request forgery risk"
+    description: "wp_remote_get() with user-controlled URL - server-side request forgery"
     severity: high
     category: vulnerability
     pattern: "(?i)wp_remote_get\\s*\\([^)]*\\$_(GET|POST|REQUEST)\\s*\\["
@@ -40,7 +79,7 @@ signatures:
 
   - id: "WP-SSRF-002"
     name: "SSRF via wp_remote_post with User Input"
-    description: "wp_remote_post() with user-controlled URL - server-side request forgery risk"
+    description: "wp_remote_post() with user-controlled URL - server-side request forgery"
     severity: high
     category: vulnerability
     pattern: "(?i)wp_remote_post\\s*\\([^)]*\\$_(GET|POST|REQUEST)\\s*\\["
@@ -49,10 +88,43 @@ signatures:
     level: 0
     enabled: true
 
-  # Unsafe option manipulation
+  - id: "WP-SSRF-003"
+    name: "SSRF via wp_safe_remote_* with User Input"
+    description: "wp_safe_remote_get/post with user input - still SSRF via open redirect"
+    severity: high
+    category: vulnerability
+    pattern: "(?i)wp_safe_remote_(get|post)\\s*\\([^)]*\\$_(GET|POST|REQUEST)\\s*\\["
+    is_regex: true
+    extensions: [php, php3, php4, php5, php7, phtml, pht]
+    level: 0
+    enabled: true
+
+  - id: "WP-SSRF-004"
+    name: "SSRF via download_url with User Input"
+    description: "download_url() with user-controlled URL - SSRF / arbitrary file fetch"
+    severity: high
+    category: vulnerability
+    pattern: "(?i)download_url\\s*\\([^)]*\\$_(GET|POST|REQUEST)\\s*\\["
+    is_regex: true
+    extensions: [php, php3, php4, php5, php7, phtml, pht]
+    level: 1
+    enabled: true
+
+  - id: "WP-SSRF-005"
+    name: "SSRF via curl_init + CURLOPT_URL User Input"
+    description: "CURLOPT_URL set from user input (function arg or array form) - SSRF"
+    severity: high
+    category: vulnerability
+    pattern: "(?i)CURLOPT_URL\\s*(=>|,)\\s*\\$_(GET|POST|REQUEST)"
+    is_regex: true
+    extensions: [php, php3, php4, php5, php7, phtml, pht]
+    level: 1
+    enabled: true
+
+  # ---------------------------------------------------------------- option / dynamic calls
   - id: "WP-VULN-001"
     name: "Unsafe update_option with User Input"
-    description: "update_option() called with unsanitized user input - may allow site configuration takeover"
+    description: "update_option() with unsanitized user input - site config takeover"
     severity: high
     category: vulnerability
     pattern: "(?i)update_option\\s*\\([^)]*\\$_(GET|POST|REQUEST)\\s*\\["
@@ -72,10 +144,9 @@ signatures:
     level: 0
     enabled: true
 
-  # call_user_func with user input
   - id: "WP-VULN-003"
     name: "Dynamic Function Call with User Input"
-    description: "call_user_func() with user-controlled function name - remote code execution risk"
+    description: "call_user_func() with user-controlled function name - remote code execution"
     severity: critical
     category: php_injection
     pattern: "(?i)call_user_func(_array)?\\s*\\(\\s*\\$_(GET|POST|REQUEST|COOKIE)\\s*\\["
@@ -84,10 +155,44 @@ signatures:
     level: 0
     enabled: true
 
-  # Auth bypass patterns
+  - id: "WP-VULN-004"
+    name: "File Write Without Nonce Check"
+    description: "file_put_contents/fwrite with user input and no nonce verification"
+    severity: medium
+    category: vulnerability
+    pattern: "(?i)(file_put_contents|fwrite)\\s*\\([^)]*\\$_(GET|POST|REQUEST)"
+    is_regex: true
+    extensions: [php, php3, php4, php5, php7, phtml, pht]
+    level: 2
+    enabled: true
+
+  # ---------------------------------------------------------------- option takeover
+  - id: "WP-OPT-001"
+    name: "default_role Raised to Administrator"
+    description: "update_option('default_role','administrator') - silent site takeover"
+    severity: critical
+    category: php_backdoor
+    pattern: "(?i)update_option\\s*\\(\\s*['\"]default_role['\"]\\s*,\\s*['\"]administrator['\"]"
+    is_regex: true
+    extensions: [php, php3, php4, php5, php7, phtml, pht]
+    level: 0
+    enabled: true
+
+  - id: "WP-OPT-002"
+    name: "users_can_register Forced On"
+    description: "update_option('users_can_register', 1) - often paired with default_role escalation"
+    severity: high
+    category: php_backdoor
+    pattern: "(?i)update_option\\s*\\(\\s*['\"]users_can_register['\"]\\s*,\\s*1"
+    is_regex: true
+    extensions: [php, php3, php4, php5, php7, phtml, pht]
+    level: 1
+    enabled: true
+
+  # ---------------------------------------------------------------- auth / privilege escalation
   - id: "WP-AUTH-001"
     name: "Direct wp_set_auth_cookie Call"
-    description: "Direct call to wp_set_auth_cookie() outside WordPress core - may grant unauthorized access"
+    description: "Direct wp_set_auth_cookie() outside core - may grant unauthorized access"
     severity: critical
     category: php_backdoor
     pattern: "(?i)wp_set_auth_cookie\\s*\\("
@@ -98,7 +203,7 @@ signatures:
 
   - id: "WP-AUTH-002"
     name: "Admin Account Creation via wp_insert_user"
-    description: "wp_insert_user() creating administrator account - backdoor admin user creation"
+    description: "wp_insert_user() creating administrator - backdoor admin user"
     severity: critical
     category: php_backdoor
     pattern: "(?i)wp_insert_user\\s*\\([^)]*['\"]role['\"]\\s*=>\\s*['\"]administrator['\"]"
@@ -109,7 +214,7 @@ signatures:
 
   - id: "WP-AUTH-003"
     name: "Capability Escalation via add_cap"
-    description: "Direct add_cap() call - may add admin capabilities to unauthorized users"
+    description: "Direct add_cap() - may grant admin capabilities to unauthorized users"
     severity: high
     category: php_backdoor
     pattern: "(?i)->add_cap\\s*\\(\\s*['\"]"
@@ -120,7 +225,7 @@ signatures:
 
   - id: "WP-AUTH-004"
     name: "Role Escalation to Administrator"
-    description: "set_role('administrator') call - privilege escalation to admin"
+    description: "set_role('administrator') - privilege escalation to admin"
     severity: critical
     category: php_backdoor
     pattern: "(?i)->set_role\\s*\\(\\s*['\"]administrator['\"]\\s*\\)"
@@ -129,22 +234,111 @@ signatures:
     level: 1
     enabled: true
 
-  # AJAX handler without nonce verification
+  - id: "WP-AUTH-006"
+    name: "Add Administrator Role"
+    description: "->add_role('administrator') - grants admin role to a user"
+    severity: critical
+    category: php_backdoor
+    pattern: "(?i)->add_role\\s*\\(\\s*['\"]administrator['\"]"
+    is_regex: true
+    extensions: [php, php3, php4, php5, php7, phtml, pht]
+    level: 1
+    enabled: true
+
+  - id: "WP-AUTH-007"
+    name: "grant_super_admin Call"
+    description: "grant_super_admin() - multisite super-admin privilege grant"
+    severity: high
+    category: php_backdoor
+    pattern: "(?i)grant_super_admin\\s*\\("
+    is_regex: true
+    extensions: [php, php3, php4, php5, php7, phtml, pht]
+    level: 1
+    enabled: true
+
+  - id: "WP-AUTH-008"
+    name: "wp_set_current_user Call"
+    description: "wp_set_current_user() - force-login as any user without credentials"
+    severity: high
+    category: php_backdoor
+    pattern: "(?i)wp_set_current_user\\s*\\("
+    is_regex: true
+    extensions: [php, php3, php4, php5, php7, phtml, pht]
+    level: 1
+    enabled: true
+
+  - id: "WP-AUTH-009"
+    name: "wp_capabilities Meta Injection"
+    description: "Direct update_user_meta('wp_capabilities') - capability injection"
+    severity: high
+    category: php_backdoor
+    pattern: "(?i)update_user_meta\\s*\\([^)]*['\"]wp_capabilities['\"]"
+    is_regex: true
+    extensions: [php, php3, php4, php5, php7, phtml, pht]
+    level: 1
+    enabled: true
+
+  # ---------------------------------------------------------------- AJAX / REST
   - id: "WP-AUTH-005"
-    name: "AJAX Handler Missing Nonce Verification"
-    description: "WordPress AJAX handler without wp_verify_nonce/check_ajax_referer - CSRF vulnerability"
+    name: "Public AJAX Handler (nopriv)"
+    description: "wp_ajax_nopriv_ handler - runs for unauthenticated users, verify nonce usage"
     severity: medium
     category: vulnerability
-    pattern: "(?i)add_action\\s*\\(\\s*['\"]wp_ajax_(nopriv_)?[^'\"]+['\"]"
+    pattern: "(?i)add_action\\s*\\(\\s*['\"]wp_ajax_nopriv_[^'\"]+['\"]"
     is_regex: true
     extensions: [php, php3, php4, php5, php7, phtml, pht]
     level: 2
     enabled: true
 
-  # Malicious hooks
+  - id: "WP-AJAX-002"
+    name: "admin_post_nopriv Handler"
+    description: "admin_post_nopriv_ handler - runs for unauthenticated users"
+    severity: medium
+    category: vulnerability
+    pattern: "(?i)add_action\\s*\\(\\s*['\"]admin_post_nopriv_"
+    is_regex: true
+    extensions: [php, php3, php4, php5, php7, phtml, pht]
+    level: 1
+    enabled: true
+
+  - id: "WP-REST-001"
+    name: "Unauthenticated REST Route"
+    description: "register_rest_route with permission_callback '__return_true' - no auth check"
+    severity: high
+    category: vulnerability
+    pattern: "(?i)register_rest_route\\s*\\([^;]{0,300}['\"]permission_callback['\"]\\s*=>\\s*'__return_true'"
+    is_regex: true
+    extensions: [php, php3, php4, php5, php7, phtml, pht]
+    level: 0
+    enabled: true
+
+  - id: "WP-REST-002"
+    name: "REST Route with Code-Execution Sink"
+    description: "register_rest_route callback invoking eval/system/exec/file write/user insert"
+    severity: critical
+    category: php_backdoor
+    pattern: "(?i)register_rest_route\\s*\\([\\s\\S]{0,400}\\b(eval|system|exec|file_put_contents|wp_insert_user|move_uploaded_file)\\s*\\("
+    is_regex: true
+    extensions: [php, php3, php4, php5, php7, phtml, pht]
+    level: 1
+    enabled: true
+
+  # ---------------------------------------------------------------- cron abuse
+  - id: "WP-CRON-001"
+    name: "wp-cron RCE with User Input"
+    description: "wp_schedule_single_event scheduled with user-controlled args - cron-based RCE"
+    severity: critical
+    category: php_malware
+    pattern: "(?i)wp_schedule_single_event\\s*\\([\\s\\S]{0,150}\\$_(GET|POST|REQUEST)\\s*\\["
+    is_regex: true
+    extensions: [php, php3, php4, php5, php7, phtml, pht]
+    level: 0
+    enabled: true
+
+  # ---------------------------------------------------------------- malicious hooks / filters
   - id: "WP-HOOK-001"
     name: "Init Hook with Eval/System Execution"
-    description: "add_action('init') containing eval/system/exec - potential RCE via WordPress hook"
+    description: "add_action('init') with eval/system/exec - RCE via WordPress hook"
     severity: critical
     category: php_malware
     pattern: "(?i)add_action\\s*\\(\\s*['\"]init['\"]\\s*,\\s*function[^}]*\\b(eval|system|exec|passthru|shell_exec)\\s*\\("
@@ -154,8 +348,8 @@ signatures:
     enabled: true
 
   - id: "WP-HOOK-002"
-    name: "wp_head Hook with Suspicious Code Injection"
-    description: "add_action('wp_head') injecting base64/eval code - malicious header injection"
+    name: "wp_head Hook with Code Injection"
+    description: "add_action('wp_head') with eval/base64/gzinflate - malicious header injection"
     severity: critical
     category: php_malware
     pattern: "(?i)add_action\\s*\\(\\s*['\"]wp_head['\"]\\s*,\\s*function[^}]*\\b(eval|base64_decode|gzinflate)\\s*\\("
@@ -166,10 +360,10 @@ signatures:
 
   - id: "WP-HOOK-003"
     name: "Content Filter with Malicious Injection"
-    description: "add_filter('the_content') injecting scripts/iframes/redirects - content hijacking"
+    description: "add_filter('the_content') injecting scripts/iframes/redirects"
     severity: high
     category: php_malware
-    pattern: "(?i)add_filter\\s*\\(\\s*['\"]the_content['\"]\\s*,\\s*function[^}]*\\b(eval|base64_decode|<script|<iframe|header\\s*\\(\\s*['\"]Location)\\b"
+    pattern: "(?i)add_filter\\s*\\(\\s*['\"]the_content['\"]\\s*,\\s*function[^}]*(eval|base64_decode|<script|<iframe|header\\s*\\(\\s*['\"]Location)"
     is_regex: true
     extensions: [php, php3, php4, php5, php7, phtml, pht]
     level: 1
@@ -177,7 +371,7 @@ signatures:
 
   - id: "WP-HOOK-004"
     name: "Scheduled Event for Persistence"
-    description: "wp_schedule_event() used for malware persistence - executes payload on schedule"
+    description: "wp_schedule_event() - may be used for malware persistence"
     severity: high
     category: php_malware
     pattern: "(?i)wp_schedule_event\\s*\\("
@@ -199,7 +393,7 @@ signatures:
 
   - id: "WP-HOOK-006"
     name: "wp_footer Hook with Code Injection"
-    description: "add_action('wp_footer') with obfuscated or executable code injection"
+    description: "add_action('wp_footer') with obfuscated or executable code"
     severity: high
     category: php_malware
     pattern: "(?i)add_action\\s*\\(\\s*['\"]wp_footer['\"]\\s*,\\s*function[^}]*\\b(eval|base64_decode|gzinflate)\\s*\\("
@@ -210,7 +404,7 @@ signatures:
 
   - id: "WP-HOOK-007"
     name: "admin_init Hook with Suspicious Payload"
-    description: "add_action('admin_init') containing code execution or file operations"
+    description: "add_action('admin_init') with code execution or file operations"
     severity: high
     category: php_malware
     pattern: "(?i)add_action\\s*\\(\\s*['\"]admin_init['\"]\\s*,\\s*function[^}]*\\b(eval|file_put_contents|wp_insert_user|wp_set_auth_cookie)\\s*\\("
@@ -219,25 +413,12 @@ signatures:
     level: 1
     enabled: true
 
-  # Generic init hook (paranoid only)
   - id: "WP-HOOK-008"
     name: "Generic Init Hook Registration"
-    description: "add_action('init') hook registration - review for suspicious callbacks"
+    description: "add_action('init') registration - review callback for suspicious behaviour"
     severity: low
     category: php_suspicious
     pattern: "(?i)add_action\\s*\\(\\s*['\"]init['\"]\\s*,"
-    is_regex: true
-    extensions: [php, php3, php4, php5, php7, phtml, pht]
-    level: 2
-    enabled: true
-
-  # File operations without nonce (paranoid)
-  - id: "WP-VULN-004"
-    name: "File Write Operation Without Nonce Check"
-    description: "file_put_contents/fwrite in plugin/theme without nonce verification"
-    severity: medium
-    category: vulnerability
-    pattern: "(?i)(file_put_contents|fwrite)\\s*\\([^)]*\\$_(GET|POST|REQUEST)"
     is_regex: true
     extensions: [php, php3, php4, php5, php7, phtml, pht]
     level: 2

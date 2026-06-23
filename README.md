@@ -184,6 +184,17 @@ houndoom detectors list
 - Doorway pages
 - Unix executables in web directories
 
+### WordPress (auto-detected or `--cms=wordpress`)
+- **Backdoors & shells:** fake core files (`wp-xmlrpc.php`, `wp-vcd.php`), eval/gzinflate/str_rot13/base64 chains, filesman/WSO/b374k/P.A.S. shells, cookie-driven eval, fake plugins with shell code, remote file inclusion, hidden admin creation
+- **DB-stored payloads & deserialization:** `eval(get_option(...))` loaders, `maybe_unserialize`/`unserialize` on user input, `phar://` triggers
+- **Vulnerability patterns:** SQLi via `$wpdb->query/get_results/get_var` (and LIKE interpolation), SSRF via `wp_remote_*`/`wp_safe_remote_*`/`download_url`/curl, unsafe `update_option`, dynamic calls, REST routes with `__return_true`, wp-cron RCE with user input, nonce-less AJAX handlers
+- **Auth & privilege escalation:** `wp_set_auth_cookie`, admin insertion, `set_role`/`add_role`/`add_cap`, `grant_super_admin`, `wp_set_current_user`, `wp_capabilities` meta injection
+- **Malicious hooks:** `init`/`wp_head`/`wp_footer`/`admin_init`/`the_content` with eval/base64/scripts
+- **Active malware families:** WP-VCD, **Balada Injector**, **SocGholish**, modern WASM/WebSocket/pool cryptominers, WooCommerce card skimmers (checkout hijack, Stripe-frame theft, billing-field harvest, Telegram/Discord webhook exfil), pharma/Japanese SEO spam, suspicious-TLD redirects, `siteurl` hijack, UA cloaking
+- **Structure anomalies:** PHP in `uploads/`, **mu-plugins persistence** (auto-loaded shells, core-name mimics), fake core files in `wp-includes/`, hidden dot-PHP in themes/plugins, `.htaccess` injection (`auto_prepend_file`, `SetHandler php`, mod_security disable, PHPRC), `.user.ini` auto_prepend (PHP-FPM)
+
+False-positive suppression is applied automatically on WordPress core files and on known security / caching / membership / form / backup plugins (Wordfence, Sucuri, WooCommerce, Jetpack, WP Rocket, Gravity Forms, ...).
+
 ## Architecture
 
 ```
@@ -196,7 +207,7 @@ houndoom/
 │   ├── detectors/         # Threat detectors
 │   │   ├── php/           # PHP backdoors, injection
 │   │   ├── javascript/    # XSS, malicious JS
-│   │   └── cms/bitrix/    # CMS-specific detection
+│   │   └── cms/           # CMS-specific detection (bitrix, wordpress)
 │   ├── deobfuscator/      # 8 deobfuscators
 │   ├── heuristic/         # Heuristic analysis
 │   ├── signatures/        # Pattern matching
