@@ -43,6 +43,7 @@ houndoom.yaml
 
 # Claude artifacts
 .claude/artifacts/
+.claude/settings.local.json
 
 # Whitelist databases
 *.db

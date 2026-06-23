@@ -165,7 +165,7 @@ func isCriticalExtension(ext string) bool {
 func isSensitiveExtension(ext string) bool {
 	sensitive := []string{
 		"php", "php3", "php4", "php5", "php6", "php7", "pht", "phtml",
-		"js", "json", "html", "htm", "shtml", "htaccess",
+		"js", "json", "html", "htm", "shtml", "htaccess", "ini",
 		"cgi", "pl", "py", "sh", "o", "so",
 		"tpl", "inc", "css", "txt", "sql",
 	}

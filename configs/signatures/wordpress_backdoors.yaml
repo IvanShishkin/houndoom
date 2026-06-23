@@ -1,0 +1,284 @@
+# WordPress Backdoors & Web Shells Signatures
+# Detects fake WP files, eval/base64 injection in themes, remote code inclusion,
+# fake plugins, hidden admin creation backdoors, modern PHP shells (filesman/WSO/
+# b374k/P.A.S.), obfuscation chains, cookie-driven eval, DB-stored payload
+# loaders and insecure deserialization sinks.
+#
+# Severity levels:
+#   critical  direct backdoor / RCE
+#   high      strong indicator, needs review
+#   medium    suspicious pattern, possible FP
+
+signatures:
+  # ---------------------------------------------------------------- fake WP files
+  - id: "WP-BACKDOOR-001"
+    name: "Fake wp-xmlrpc.php File"
+    description: "Suspicious wp-xmlrpc.php - common backdoor (legitimate file is xmlrpc.php)"
+    severity: critical
+    category: php_backdoor
+    pattern: "wp-xmlrpc\\.php"
+    is_regex: true
+    extensions: [php, php3, php4, php5, php7, phtml, pht]
+    level: 0
+    enabled: true
+
+  - id: "WP-BACKDOOR-002"
+    name: "Fake wp-cron-jobs.php File"
+    description: "Suspicious wp-cron-jobs.php - not a legitimate WordPress core file"
+    severity: critical
+    category: php_backdoor
+    pattern: "wp-cron-jobs\\.php"
+    is_regex: true
+    extensions: [php, php3, php4, php5, php7, phtml, pht]
+    level: 0
+    enabled: true
+
+  - id: "WP-BACKDOOR-003"
+    name: "WP-VCD Backdoor File"
+    description: "wp-vcd.php is a known malware family backdoor file"
+    severity: critical
+    category: php_backdoor
+    pattern: "wp-vcd\\.php"
+    is_regex: true
+    extensions: [php, php3, php4, php5, php7, phtml, pht]
+    level: 0
+    enabled: true
+
+  - id: "WP-BACKDOOR-009"
+    name: "WordPress wp-tmp.php Backdoor"
+    description: "wp-tmp.php backdoor associated with wp-vcd malware"
+    severity: critical
+    category: php_backdoor
+    pattern: "wp-tmp\\.php"
+    is_regex: true
+    extensions: [php, php3, php4, php5, php7, phtml, pht]
+    level: 0
+    enabled: true
+
+  - id: "WP-BACKDOOR-010"
+    name: "WordPress wp-feed.php Backdoor"
+    description: "wp-feed.php backdoor associated with wp-vcd malware"
+    severity: critical
+    category: php_backdoor
+    pattern: "wp-feed\\.php"
+    is_regex: true
+    extensions: [php, php3, php4, php5, php7, phtml, pht]
+    level: 0
+    enabled: true
+
+  # ---------------------------------------------------------------- eval / obfuscation
+  - id: "WP-BACKDOOR-004"
+    name: "Eval Base64 in Theme File"
+    description: "Base64 encoded eval execution - common backdoor technique"
+    severity: critical
+    category: php_backdoor
+    pattern: "(?i)eval\\s*\\(\\s*base64_decode\\s*\\("
+    is_regex: true
+    extensions: [php, php3, php4, php5, php7, phtml, pht]
+    level: 0
+    enabled: true
+
+  - id: "WP-BACKDOOR-012"
+    name: "Gzinflate Base64 Obfuscated Backdoor"
+    description: "eval(gzinflate(base64_decode()) obfuscation chain common in WP backdoors"
+    severity: critical
+    category: php_backdoor
+    pattern: "(?i)eval\\s*\\(\\s*gzinflate\\s*\\(\\s*base64_decode"
+    is_regex: true
+    extensions: [php, php3, php4, php5, php7, phtml, pht]
+    level: 0
+    enabled: true
+
+  - id: "WP-BACKDOOR-013"
+    name: "Preg Replace with Eval Modifier"
+    description: "preg_replace with /e modifier - deprecated code execution vector"
+    severity: high
+    category: php_backdoor
+    pattern: "(?i)preg_replace\\s*\\(\\s*['\"][^'\"]*\\/[a-z]*e[a-z]*['\"]"
+    is_regex: true
+    extensions: [php, php3, php4, php5, php7, phtml, pht]
+    level: 1
+    enabled: true
+
+  - id: "WP-BACKDOOR-008"
+    name: "Eval with POST/GET/REQUEST Input"
+    description: "Direct eval of user-supplied input - critical backdoor pattern"
+    severity: critical
+    category: php_backdoor
+    pattern: "(?i)eval\\s*\\(\\s*\\$_(POST|GET|REQUEST|COOKIE)\\s*\\["
+    is_regex: true
+    extensions: [php, php3, php4, php5, php7, phtml, pht]
+    level: 0
+    enabled: true
+
+  - id: "WP-BACKDOOR-016"
+    name: "Triple-Chain Obfuscation Backdoor"
+    description: "gzinflate/gzuncompress + str_rot13 + base64_decode triple obfuscation chain"
+    severity: critical
+    category: php_backdoor
+    pattern: "(?i)(eval|@\\()?[^;]{0,40}(gzinflate|gzuncompress)\\s*\\([^;]{0,40}(str_rot13)?[^;]{0,40}base64_decode"
+    is_regex: true
+    extensions: [php, php3, php4, php5, php7, phtml, pht]
+    level: 0
+    enabled: true
+
+  - id: "WP-BACKDOOR-017"
+    name: "eval(gzinflate(str_rot13(base64_decode())))"
+    description: "Four-layer obfuscation chain - classic web shell loader"
+    severity: critical
+    category: php_backdoor
+    pattern: "(?i)eval\\s*\\(\\s*gzinflate\\s*\\(\\s*str_rot13\\s*\\(\\s*base64_decode"
+    is_regex: true
+    extensions: [php, php3, php4, php5, php7, phtml, pht]
+    level: 0
+    enabled: true
+
+  - id: "WP-BACKDOOR-018"
+    name: "Cookie-Driven eval/assert/system"
+    description: "eval/assert/create_function/system invoked directly with $_COOKIE - cookie-triggered backdoor"
+    severity: critical
+    category: php_backdoor
+    pattern: "(?i)(eval|assert|create_function|system)\\s*\\(\\s*\\$_COOKIE"
+    is_regex: true
+    extensions: [php, php3, php4, php5, php7, phtml, pht]
+    level: 0
+    enabled: true
+
+  # ---------------------------------------------------------------- remote inclusion
+  - id: "WP-BACKDOOR-005"
+    name: "Remote Code Inclusion"
+    description: "Remote URL include/require - loads and executes code from external server"
+    severity: critical
+    category: php_backdoor
+    pattern: "(?i)(include|require|include_once|require_once)\\s*\\(?\\s*['\"]https?://"
+    is_regex: true
+    extensions: [php, php3, php4, php5, php7, phtml, pht]
+    level: 0
+    enabled: true
+
+  # ---------------------------------------------------------------- hidden admin creation
+  - id: "WP-BACKDOOR-006"
+    name: "Hidden Admin User Creation Backdoor"
+    description: "Creates WordPress admin user then sets administrator role - backdoor indicator"
+    severity: critical
+    category: php_backdoor
+    pattern: "(?i)wp_create_user\\s*\\([^)]*\\)\\s*;[\\s\\S]{0,200}set_role\\s*\\(\\s*['\"]administrator['\"]"
+    is_regex: true
+    extensions: [php, php3, php4, php5, php7, phtml, pht]
+    level: 0
+    enabled: true
+
+  # ---------------------------------------------------------------- fake plugins
+  - id: "WP-BACKDOOR-007"
+    name: "Fake Single-File Plugin with Shell"
+    description: "Single-file plugin (Plugin Name header) containing shell execution functions"
+    severity: critical
+    category: php_shell
+    # NOTE: bare exec() excluded to avoid WP-CLI/WP-Cron stub FPs (research §6.2)
+    pattern: "(?i)Plugin\\s+Name\\s*:[\\s\\S]{0,800}\\b(system|passthru|shell_exec|proc_open|popen)\\s*\\("
+    is_regex: true
+    extensions: [php, php3, php4, php5, php7, phtml, pht]
+    level: 0
+    enabled: true
+
+  - id: "WP-BACKDOOR-011"
+    name: "Fake Plugin with Eval Backdoor"
+    description: "Plugin header + eval/assert/create_function - malicious single-file plugin"
+    severity: critical
+    category: php_backdoor
+    pattern: "(?i)Plugin\\s+Name\\s*:[\\s\\S]{0,800}(eval|assert|create_function)\\s*\\("
+    is_regex: true
+    extensions: [php, php3, php4, php5, php7, phtml, pht]
+    level: 0
+    enabled: true
+
+  # ---------------------------------------------------------------- known PHP shells
+  - id: "WP-BACKDOOR-014"
+    name: "Filesman Shell Cookie Sentinel"
+    description: "$_COOKIE['FilesMan'] sentinel - evolved filesman web shell family"
+    severity: critical
+    category: php_shell
+    pattern: "(?i)\\$_COOKIE\\s*\\[\\s*['\"]FilesMan['\"]\\s*\\]"
+    is_regex: true
+    extensions: [php, php3, php4, php5, php7, phtml, pht]
+    level: 0
+    enabled: true
+
+  - id: "WP-BACKDOOR-015"
+    name: "WSO / Stasis Shell Markers"
+    description: "WSOsetcookie / $auth_pass / $default_use_ajax - WSO/Stasis web shell"
+    severity: critical
+    category: php_shell
+    pattern: "(?i)(WSOsetcookie|\\$auth_pass|\\$default_use_ajax)"
+    is_regex: true
+    extensions: [php, php3, php4, php5, php7, phtml, pht]
+    level: 0
+    enabled: true
+
+  - id: "WP-BACKDOOR-023"
+    name: "P.A.S. / Sniper / IndoXploit Shell"
+    description: "Known web shell family markers (Snip3r/Sn1pp3r/indoXploit)"
+    severity: critical
+    category: php_shell
+    pattern: "(?i)(Snip3r|Sn1pp3r|indoXploit|IndoXploit)"
+    is_regex: true
+    extensions: [php, php3, php4, php5, php7, phtml, pht]
+    level: 0
+    enabled: true
+
+  # ---------------------------------------------------------------- DB-stored payload loaders
+  - id: "WP-BACKDOOR-019"
+    name: "DB-Stored Payload Loader (get_option+eval)"
+    description: "eval/assert/create_function invoked on get_option/get_transient result - DB-resident payload execution"
+    severity: critical
+    category: php_backdoor
+    pattern: "(?i)(eval|create_function|assert)\\s*\\(\\s*get_(option|transient)\\s*\\("
+    is_regex: true
+    extensions: [php, php3, php4, php5, php7, phtml, pht]
+    level: 0
+    enabled: true
+
+  - id: "WP-BACKDOOR-024"
+    name: "wpdb-Driven Shell Loader"
+    description: "Exec/write sink fed by $wpdb->get_var/get_row/get_results - DB-resident payload"
+    severity: critical
+    category: php_backdoor
+    pattern: "(?i)(eval|system|exec|file_put_contents)\\s*\\([\\s\\S]{0,120}\\$wpdb\\s*->\\s*(get_var|get_row|get_col|get_results)"
+    is_regex: true
+    extensions: [php, php3, php4, php5, php7, phtml, pht]
+    level: 1
+    enabled: true
+
+  # ---------------------------------------------------------------- insecure deserialization
+  - id: "WP-BACKDOOR-020"
+    name: "maybe_unserialize on User Input"
+    description: "maybe_unserialize() called on raw user input - PHP object injection sink"
+    severity: high
+    category: php_injection
+    pattern: "(?i)maybe_unserialize\\s*\\(\\s*\\$_(GET|POST|REQUEST|COOKIE)"
+    is_regex: true
+    extensions: [php, php3, php4, php5, php7, phtml, pht]
+    level: 0
+    enabled: true
+
+  - id: "WP-BACKDOOR-021"
+    name: "Raw unserialize on User Input"
+    description: "unserialize() called on raw user input - PHP object injection / RCE gadget"
+    severity: high
+    category: php_injection
+    pattern: "(?i)\\bunserialize\\s*\\(\\s*\\$_(GET|POST|REQUEST|COOKIE)"
+    is_regex: true
+    extensions: [php, php3, php4, php5, php7, phtml, pht]
+    level: 0
+    enabled: true
+
+  - id: "WP-BACKDOOR-022"
+    name: "phar:// Deserialization Trigger"
+    description: "phar:// stream wrapper passed to filesystem function - PHAR deserialization attack"
+    severity: critical
+    category: php_injection
+    pattern: "(?i)(file_exists|is_dir|is_file|getimagesize|fileatime|filesize|file_get_contents)\\s*\\(\\s*['\"]phar://"
+    is_regex: true
+    extensions: [php, php3, php4, php5, php7, phtml, pht]
+    level: 0
+    enabled: true
