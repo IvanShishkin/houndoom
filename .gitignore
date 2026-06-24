@@ -45,6 +45,12 @@ houndoom.yaml
 .claude/artifacts/
 .claude/settings.local.json
 
+# Claude Code skills are versioned product files, not build artifacts.
+# The broad 'houndoom-*' rule above also matches the 'houndoom-scan' skill dir,
+# so re-include the whole skills tree.
+!.claude/skills/
+!.claude/skills/**
+
 # Whitelist databases
 *.db
 !houndoom-whitelist.db
