@@ -56,6 +56,16 @@ houndoom.yaml
 tmp/
 temp/
 
+# Agentless remote-scan: embedded bundled binaries.
+# The generic 'dist/' rule above would hide the go:embed placeholder directory;
+# re-include it so the committed README.md keeps the dir present for compilation,
+# but keep the actual built linux binaries (placed by the release build) ignored.
+!internal/remote/binaries/dist/
+internal/remote/binaries/dist/houndoom-linux-*
+
+# Local engagement output (reports may contain client code)
+.houndoom/
+
 # Go workspace file
 go.work
 
