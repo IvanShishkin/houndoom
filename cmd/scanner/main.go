@@ -57,6 +57,8 @@ web shells, and vulnerabilities in web applications.`,
 	rootCmd.AddCommand(scanCmd())
 	rootCmd.AddCommand(deobCmd())
 	rootCmd.AddCommand(detectorsCmd())
+	rootCmd.AddCommand(engagementsCmd())
+	rootCmd.AddCommand(remoteScanCmd())
 	rootCmd.AddCommand(helpCmd())
 
 	if err := rootCmd.Execute(); err != nil {
