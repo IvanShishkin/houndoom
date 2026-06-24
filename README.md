@@ -18,6 +18,7 @@ Houndoom is a high-performance security scanner written in Go for detecting mali
 - **Heuristic Analysis:** Entropy analysis, data flow tracking, pattern detection
 - **CMS-Specific Detection:** Specialized checks for Bitrix, WordPress, and other CMS
 - **Multiple Report Formats:** HTML, JSON, Markdown, Text, XML
+- **Agentless Remote Scan:** Recon-only scan of a remote host over SSH — nothing installed on the target — orchestrated and analyzed by Claude Code
 
 ## HTML Report
 
@@ -116,6 +117,46 @@ houndoom scan /path --ai --ai-model=sonnet
 - False positive detection
 - Support for English, Russian, Spanish, German, Chinese
 
+## Agentless Remote Scan (Claude Code)
+
+Scan a remote host **without installing anything on it**. Houndoom runs on your
+machine (the control plane), delivers the scanner to the target over SSH, runs a
+**recon-only** (read-only) scan, collects the JSON report back, then a Claude Code
+skill analyzes the findings. The target only needs to accept SSH — no outbound
+internet access required on the target.
+
+This mode is best for locked-down networks, no-agent constraints, and iterative
+analyst-driven investigation. It complements (does not replace) the local scanner.
+
+```bash
+# Dry-run: print the exact plan without connecting
+houndoom remote-scan --host scan@10.0.0.5 --path /var/www --mode paranoid --plan
+
+# Run the recon-only remote scan (asks for confirmation, then connects)
+houndoom remote-scan --host scan@10.0.0.5 --path /var/www --mode paranoid
+
+# Stored reports/audit logs live under ~/.houndoom/engagements/<target>-<ts>/
+houndoom engagements purge --older-than 720h   # retention cleanup (default 30 days)
+```
+
+From **Claude Code**, run the `/houndoom-scan` skill: it collects the target,
+runs `remote-scan`, and analyzes the report interactively.
+
+**Security posture (v1):**
+- **Recon-only** — read-only on the target; the only remote footprint is a temp
+  upload dir that is removed on every path (including failures).
+- **SSH keys via ssh-agent only** — there is no `--key` flag; the system `ssh`/`scp`
+  clients are used, so `~/.ssh/config` (ProxyJump/bastions, ports, per-host keys)
+  works out of the box. Key material is never read or logged.
+- **Host-key verification is enforced** (never weakened).
+- **Resource limits** — the remote scan runs under `nice` + `timeout` to protect
+  client production (`--timeout`, default 1h; optional `--max-size`).
+- **Confirmation gate** prints the exact target before connecting (default: abort).
+- **Audit log** records every remote command (timestamp, operator, target, action).
+- **Agent boundary** — `.claude/settings.json` denies the agent raw
+  `ssh`/`scp`/`curl`/… so all target access goes through the audited `remote-scan`
+  command, and scanned content is treated as inert data (prompt-injection defense).
+
 ## CLI Reference
 
 ### Scan Command
@@ -149,6 +190,24 @@ houndoom scan [path] [flags]
   --ai-lang string       en|ru|es|de|zh (default "en")
 ```
 
+### Remote Scan Command
+
+```bash
+houndoom remote-scan [flags]
+
+  --host string       Target in user@host form (required)
+  --path string       Absolute path on the target to scan
+  --mode string       fast|normal|paranoid (default "normal")
+  -o, --output string Report path override (default: per-engagement directory)
+  --plan              Print the execution plan without connecting
+  --yes               Skip the interactive confirmation gate
+  --timeout duration  Wall-clock limit for the remote scan (default 1h)
+  --max-size string   Max file size passed to the remote scanner (e.g. 500M)
+```
+
+> SSH keys are taken from ssh-agent (there is no `--key` flag). Authorization is
+> by key possession — there is no in-app allowlist.
+
 ### Other Commands
 
 ```bash
@@ -158,6 +217,8 @@ houndoom deob <file>
 # List detectors
 houndoom detectors list
 
+# Purge stored remote-scan engagement outputs (reports + audit logs)
+houndoom engagements purge --older-than 720h
 ```
 
 ## Detected Threats
@@ -212,9 +273,12 @@ houndoom/
 │   ├── heuristic/         # Heuristic analysis
 │   ├── signatures/        # Pattern matching
 │   ├── ai/                # Claude API integration
+│   ├── remote/            # Agentless remote-scan over SSH (transport, audit, orchestration)
+│   ├── engagement/        # Per-engagement output dirs + retention
 │   └── report/            # Report generators
 ├── pkg/models/            # Data models, scoring
-└── configs/signatures/    # YAML signature databases
+├── configs/signatures/    # YAML signature databases
+└── .claude/skills/        # Claude Code skills (houndoom-scan)
 ```
 
 ## Development
