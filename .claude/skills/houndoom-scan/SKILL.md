@@ -132,6 +132,15 @@ Reconciliation rules:
   by-verdict line. If "malicious files" differs from raw findings (multiple
   signatures per file), say so explicitly (e.g. "143 files / 207 raw findings").
 - Order findings highest-risk first, both across and within sections.
-- Cap inline file lists at ~15 per group; if more, state how many are omitted and
-  offer to write the full list to `<engagement-dir>/malicious-paths.txt` (write it
-  only when the operator asks).
+
+Large result sets — keep the report a fixed, scannable size no matter how big the
+infection is. NEVER print every path.
+
+- Roll up by directory and signature with counts instead of listing files
+  (e.g. `storage/app/** — 1,243 files · eval(gzuncompress()) goto shells`).
+- Show at most ~15 representative example files per group, then `+<N> more`.
+- When any group exceeds that cap, ALWAYS write the complete, sorted path list to
+  `<engagement-dir>/malicious-paths.txt` and cite it in the report — do not wait
+  to be asked. (This is a local file write; the target is never touched.)
+- The total report length must not grow with the number of findings — only the
+  counts and the exported file do.
