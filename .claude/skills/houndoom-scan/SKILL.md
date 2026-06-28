@@ -18,14 +18,35 @@ ssh-agent and are never visible to you.
 - The scan is recon-only. Never propose or run remediation/quarantine on the
   target. Remediation is the human operator's job, off the report.
 
+## Preflight (run before the first scan in a session)
+
+`remote-scan` ships the scanner to the target from binaries embedded in the
+control-plane. A plain `go build` does NOT embed them — only `make remote-build`
+does. Skipping this makes the scan connect, then fail at binary selection with
+`no bundled binary for linux/<arch>`.
+
+1. Resolve the control-plane binary. Prefer `./bin/houndoom`; fall back to
+   `houndoom` on PATH (present after `make install`). Use that path verbatim in
+   every command below.
+2. Verify it is remote-capable. The embedded linux scanners live in
+   `internal/remote/binaries/dist/`. If `./bin/houndoom` is missing OR
+   `internal/remote/binaries/dist/houndoom-linux-amd64` is missing, the binary
+   is not (re)built with the embed — run `make remote-build` and use the
+   resulting `./bin/houndoom`.
+3. Sanity-check without connecting:
+   `./bin/houndoom remote-scan --host <user@host> --path <path> --plan`.
+   If this errors, fix the build before going further.
+
+Do not run `go build` to produce the scanner — it silently drops the embed.
+
 ## Workflow
 
 1. Collect from the operator: `user@host`, absolute `path`, and `mode`
    (fast | normal | paranoid; default normal).
 2. Show the exact target and confirm before connecting. You may run a dry-run
-   first: `houndoom remote-scan --host <user@host> --path <path> --mode <mode> --plan`.
+   first: `./bin/houndoom remote-scan --host <user@host> --path <path> --mode <mode> --plan`.
 3. Run the scan:
-   `houndoom remote-scan --host <user@host> --path <path> --mode <mode>`
+   `./bin/houndoom remote-scan --host <user@host> --path <path> --mode <mode>`
    It prints `Report: <path>` pointing at the collected `report.json` in the
    per-engagement directory.
 4. Read that `report.json` and analyze the findings.

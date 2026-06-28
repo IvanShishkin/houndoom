@@ -1,8 +1,12 @@
-.PHONY: build build-all test lint clean run help
+.PHONY: build build-all remote-build test lint clean run help
 
 # Build variables
 BINARY_NAME=houndoom
 BUILD_DIR=bin
+PKG=./cmd/scanner
+# Bundled scanner binaries for agentless remote-scan delivery.
+REMOTE_DIST=internal/remote/binaries/dist
+REMOTE_STAGE=$(BUILD_DIR)/remote-stage
 VERSION?=1.0.0
 COMMIT=$(shell git rev-parse --short HEAD 2>/dev/null || echo "unknown")
 BUILD_TIME=$(shell date -u +"%Y-%m-%dT%H:%M:%SZ")
@@ -27,27 +31,43 @@ help: ## Show this help message
 build: ## Build the binary for current platform
 	@echo "Building $(BINARY_NAME)..."
 	@mkdir -p $(BUILD_DIR)
-	$(GOBUILD) $(LDFLAGS) -o $(BUILD_DIR)/$(BINARY_NAME) cmd/scanner/main.go
+	$(GOBUILD) $(LDFLAGS) -o $(BUILD_DIR)/$(BINARY_NAME) $(PKG)
 	@echo "Build complete: $(BUILD_DIR)/$(BINARY_NAME)"
+
+remote-build: ## Build native control-plane with embedded linux scanners (for remote-scan)
+	@echo "Staging linux target binaries..."
+	@mkdir -p $(REMOTE_STAGE) $(REMOTE_DIST)
+	@# The scanner carries //go:embed dist, so the target binaries must be built
+	@# while dist/ holds only the README — otherwise arm64 embeds amd64 and the
+	@# artifacts bloat recursively. Stage them, then drop into dist/.
+	@find $(REMOTE_DIST) -type f ! -name 'README.md' -delete
+	GOOS=linux GOARCH=amd64 $(GOBUILD) $(LDFLAGS) -o $(REMOTE_STAGE)/$(BINARY_NAME)-linux-amd64 $(PKG)
+	GOOS=linux GOARCH=arm64 $(GOBUILD) $(LDFLAGS) -o $(REMOTE_STAGE)/$(BINARY_NAME)-linux-arm64 $(PKG)
+	@cp $(REMOTE_STAGE)/$(BINARY_NAME)-linux-* $(REMOTE_DIST)/
+	@echo "Building native control-plane with embedded scanners..."
+	@mkdir -p $(BUILD_DIR)
+	$(GOBUILD) $(LDFLAGS) -o $(BUILD_DIR)/$(BINARY_NAME) $(PKG)
+	@echo "Remote-capable build complete: $(BUILD_DIR)/$(BINARY_NAME)"
+	@echo "Run: $(BUILD_DIR)/$(BINARY_NAME) remote-scan --host user@host --path /var/www --plan"
 
 build-all: ## Build for all platforms (Linux, Windows, macOS)
 	@echo "Building for all platforms..."
 	@mkdir -p $(BUILD_DIR)
 
 	@echo "Building for Linux amd64..."
-	GOOS=linux GOARCH=amd64 $(GOBUILD) $(LDFLAGS) -o $(BUILD_DIR)/$(BINARY_NAME)-linux-amd64 cmd/scanner/main.go
+	GOOS=linux GOARCH=amd64 $(GOBUILD) $(LDFLAGS) -o $(BUILD_DIR)/$(BINARY_NAME)-linux-amd64 $(PKG)
 
 	@echo "Building for Linux arm64..."
-	GOOS=linux GOARCH=arm64 $(GOBUILD) $(LDFLAGS) -o $(BUILD_DIR)/$(BINARY_NAME)-linux-arm64 cmd/scanner/main.go
+	GOOS=linux GOARCH=arm64 $(GOBUILD) $(LDFLAGS) -o $(BUILD_DIR)/$(BINARY_NAME)-linux-arm64 $(PKG)
 
 	@echo "Building for Windows amd64..."
-	GOOS=windows GOARCH=amd64 $(GOBUILD) $(LDFLAGS) -o $(BUILD_DIR)/$(BINARY_NAME)-windows-amd64.exe cmd/scanner/main.go
+	GOOS=windows GOARCH=amd64 $(GOBUILD) $(LDFLAGS) -o $(BUILD_DIR)/$(BINARY_NAME)-windows-amd64.exe $(PKG)
 
 	@echo "Building for macOS amd64..."
-	GOOS=darwin GOARCH=amd64 $(GOBUILD) $(LDFLAGS) -o $(BUILD_DIR)/$(BINARY_NAME)-darwin-amd64 cmd/scanner/main.go
+	GOOS=darwin GOARCH=amd64 $(GOBUILD) $(LDFLAGS) -o $(BUILD_DIR)/$(BINARY_NAME)-darwin-amd64 $(PKG)
 
 	@echo "Building for macOS arm64..."
-	GOOS=darwin GOARCH=arm64 $(GOBUILD) $(LDFLAGS) -o $(BUILD_DIR)/$(BINARY_NAME)-darwin-arm64 cmd/scanner/main.go
+	GOOS=darwin GOARCH=arm64 $(GOBUILD) $(LDFLAGS) -o $(BUILD_DIR)/$(BINARY_NAME)-darwin-arm64 $(PKG)
 
 	@echo "Build complete for all platforms!"
 
@@ -92,6 +112,8 @@ clean: ## Clean build artifacts
 	@echo "Cleaning..."
 	$(GOCLEAN)
 	rm -rf $(BUILD_DIR)
+	@# Drop staged scanner binaries but keep the README that holds dist/ present.
+	find $(REMOTE_DIST) -type f ! -name 'README.md' -delete 2>/dev/null || true
 	rm -f coverage.txt coverage.out coverage.html
 	@echo "Clean complete!"
 
