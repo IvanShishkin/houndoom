@@ -13,7 +13,7 @@ type File struct {
 	Size         int64     // File size in bytes
 	ModTime      time.Time // Modification time
 	ChangeTime   time.Time // Change time (inode)
-	Content      []byte    // File content
+	Content      []byte    `json:"-"` // In-memory file content; never serialized into reports (would bloat JSON with full file bodies).
 	Hash         string    // File hash (CRC32 or SHA1)
 	IsSymlink    bool      // Is symbolic link
 	IsHidden     bool      // Is hidden file
