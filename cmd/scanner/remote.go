@@ -13,6 +13,7 @@ import (
 	"github.com/IvanShishkin/houndoom/internal/engagement"
 	"github.com/IvanShishkin/houndoom/internal/remote"
 	"github.com/IvanShishkin/houndoom/internal/remote/binaries"
+	"github.com/IvanShishkin/houndoom/internal/report"
 	"github.com/spf13/cobra"
 )
 
@@ -74,6 +75,15 @@ material is never read by this command directly — it is provided by ssh-agent.
 					return err
 				}
 				fmt.Printf("Report: %s\n", reportPath)
+
+				// Render a standalone HTML view locally, next to the JSON report.
+				// This is a local post-processing step; the target is never touched.
+				htmlPath := strings.TrimSuffix(reportPath, filepath.Ext(reportPath)) + ".html"
+				if rerr := report.RenderHTMLFromJSON(reportPath, htmlPath); rerr != nil {
+					fmt.Fprintf(os.Stderr, "warning: HTML report generation failed: %v\n", rerr)
+				} else {
+					fmt.Printf("HTML Report: %s\n", htmlPath)
+				}
 				return nil
 			}
 

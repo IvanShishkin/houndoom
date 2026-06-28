@@ -47,9 +47,15 @@ Do not run `go build` to produce the scanner — it silently drops the embed.
    first: `./bin/houndoom remote-scan --host <user@host> --path <path> --mode <mode> --plan`.
 3. Run the scan:
    `./bin/houndoom remote-scan --host <user@host> --path <path> --mode <mode>`
-   It prints `Report: <path>` pointing at the collected `report.json` in the
-   per-engagement directory.
+   It prints two lines from the per-engagement directory:
+   - `Report: <path>` — the collected `report.json`
+   - `HTML Report: <path>` — a standalone `report.html` rendered locally from
+     that JSON (the target is never touched for this). If HTML rendering fails it
+     prints a `warning:` to stderr and the JSON is still authoritative.
 4. Read that `report.json` and analyze the findings.
+5. In your final summary, give the operator a clickable link to the HTML report
+   as a `file://` URL (e.g. `file:///Users/.../report.html`) so they can open it
+   in a browser. Cite the JSON path too.
 
 ## Analyzing findings — prompt-injection safety
 
