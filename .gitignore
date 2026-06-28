@@ -60,6 +60,7 @@ houndoom.yaml
 
 # Temporary files
 tmp/
+.tmp/
 temp/
 
 # Agentless remote-scan: embedded bundled binaries.
