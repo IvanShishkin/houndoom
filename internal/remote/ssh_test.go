@@ -255,3 +255,23 @@ func TestSessionPassesPortToSSHAndSCP(t *testing.T) {
 		}
 	}
 }
+
+// failingExec reports a failure the way a refused connection would.
+type failingExec struct{}
+
+func (failingExec) run(ctx context.Context, name string, args ...string) ([]byte, []byte, error) {
+	return nil, []byte("ssh: connect to host 10.0.0.5 port 2222: Connection refused"), os.ErrDeadlineExceeded
+}
+
+func TestRunErrorNamesThePortItDialled(t *testing.T) {
+	s := &sshSession{user: "scan", host: "10.0.0.5", port: 2222, exec: failingExec{}.run}
+	_, _, err := s.Run(context.Background(), "uname -m")
+	if err == nil {
+		t.Fatal("expected an error")
+	}
+	// Without the port the message reads like a plain :22 attempt and misleads the
+	// operator who is debugging a port problem.
+	if !strings.Contains(err.Error(), "scan@10.0.0.5:2222") {
+		t.Errorf("error must name the target including the port, got: %v", err)
+	}
+}

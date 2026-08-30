@@ -85,7 +85,8 @@ func (s *sshSession) Run(ctx context.Context, cmd string) ([]byte, []byte, error
 	args := append(sshBaseArgs(s.user, s.host, s.port), cmd)
 	out, errOut, err := s.exec(ctx, "ssh", args...)
 	if err != nil {
-		return out, errOut, fmt.Errorf("ssh %s@%s: %w (stderr: %s)", s.user, s.host, err, string(errOut))
+		target := TargetLabel(fmt.Sprintf("%s@%s", s.user, s.host), s.port)
+		return out, errOut, fmt.Errorf("ssh %s: %w (stderr: %s)", target, err, string(errOut))
 	}
 	return out, errOut, nil
 }
