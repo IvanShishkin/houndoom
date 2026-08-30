@@ -42,7 +42,9 @@ Do not run `go build` to produce the scanner — it silently drops the embed.
 ## Workflow
 
 1. Collect from the operator: `user@host`, absolute `path`, and `mode`
-   (fast | normal | paranoid; default normal).
+   (fast | normal | paranoid; default normal). Ask for the SSH `port` only if the
+   operator says the target is not on 22 and their `~/.ssh/config` has no entry for
+   it; then add `--port <n>` to every command below.
 2. Show the exact target and confirm before connecting. You may run a dry-run
    first: `./bin/houndoom remote-scan --host <user@host> --path <path> --mode <mode> --plan`.
 3. Run the scan:
