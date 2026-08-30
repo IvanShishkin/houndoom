@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"strconv"
 )
 
 // execRunner runs an external command and returns its stdout/stderr. It is a
@@ -31,42 +32,57 @@ var commonOpts = []string{"-o", "BatchMode=yes"}
 // to preserve local file mode/timestamps on the remote.
 var commonScpUploadOpts = []string{"-p", "-o", "BatchMode=yes"}
 
+// portOpt returns the port option for ssh (-p) or scp (-P), or nothing when the
+// port is unset. Port 0 means "not specified": argv stays exactly as it was before
+// the flag existed, so the operator's ~/.ssh/config keeps deciding.
+func portOpt(flag string, port int) []string {
+	if port == 0 {
+		return nil
+	}
+	return []string{flag, strconv.Itoa(port)}
+}
+
 // sshBaseArgs builds the ssh argv up to (not including) the remote command.
-func sshBaseArgs(user, host string) []string {
+func sshBaseArgs(user, host string, port int) []string {
 	args := append([]string{}, commonOpts...)
+	args = append(args, portOpt("-p", port)...)
 	return append(args, fmt.Sprintf("%s@%s", user, host))
 }
 
 // scpArgs builds the scp argv to copy localPath to user@host:remotePath.
 // Uses -p to preserve mode/timestamps.
-func scpArgs(user, host, localPath, remotePath string) []string {
+func scpArgs(user, host, localPath, remotePath string, port int) []string {
 	args := append([]string{}, commonScpUploadOpts...)
+	args = append(args, portOpt("-P", port)...)
 	return append(args, localPath, fmt.Sprintf("%s@%s:%s", user, host, remotePath))
 }
 
 // scpFromArgs builds the scp argv to copy user@host:remotePath to localPath.
-func scpFromArgs(user, host, remotePath, localPath string) []string {
+func scpFromArgs(user, host, remotePath, localPath string, port int) []string {
 	args := append([]string{}, commonOpts...)
+	args = append(args, portOpt("-P", port)...)
 	return append(args, fmt.Sprintf("%s@%s:%s", user, host, remotePath), localPath)
 }
 
 type sshSession struct {
 	user string
 	host string
+	port int
 	exec execRunner
 }
 
 // NewSSHConnector returns a Connector backed by the system ssh/scp clients.
-func NewSSHConnector() Connector {
+// port 0 leaves the port to ssh (i.e. to ~/.ssh/config, else 22).
+func NewSSHConnector(port int) Connector {
 	return func(ctx context.Context, user, host string) (Session, error) {
-		return &sshSession{user: user, host: host, exec: realExec}, nil
+		return &sshSession{user: user, host: host, port: port, exec: realExec}, nil
 	}
 }
 
 // Run executes a command on the target. The remote command is passed as a
 // single trailing argv element, never concatenated into ssh options.
 func (s *sshSession) Run(ctx context.Context, cmd string) ([]byte, []byte, error) {
-	args := append(sshBaseArgs(s.user, s.host), cmd)
+	args := append(sshBaseArgs(s.user, s.host, s.port), cmd)
 	out, errOut, err := s.exec(ctx, "ssh", args...)
 	if err != nil {
 		return out, errOut, fmt.Errorf("ssh %s@%s: %w (stderr: %s)", s.user, s.host, err, string(errOut))
@@ -92,7 +108,7 @@ func (s *sshSession) Upload(ctx context.Context, data []byte, remotePath string,
 	if err := tmp.Close(); err != nil {
 		return err
 	}
-	args := scpArgs(s.user, s.host, tmp.Name(), remotePath)
+	args := scpArgs(s.user, s.host, tmp.Name(), remotePath, s.port)
 	if _, errOut, err := s.exec(ctx, "scp", args...); err != nil {
 		return fmt.Errorf("scp upload: %w (stderr: %s)", err, string(errOut))
 	}
@@ -108,7 +124,7 @@ func (s *sshSession) Download(ctx context.Context, remotePath string) ([]byte, e
 	tmpName := tmp.Name()
 	tmp.Close()
 	defer os.Remove(tmpName)
-	args := scpFromArgs(s.user, s.host, remotePath, tmpName)
+	args := scpFromArgs(s.user, s.host, remotePath, tmpName, s.port)
 	if _, errOut, err := s.exec(ctx, "scp", args...); err != nil {
 		return nil, fmt.Errorf("scp download: %w (stderr: %s)", err, string(errOut))
 	}

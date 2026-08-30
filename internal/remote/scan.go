@@ -17,6 +17,7 @@ type Options struct {
 	Path    string        // absolute path on target
 	Mode    string        // fast|normal|paranoid
 	Output  string        // local path to write the collected report
+	Port    int           // ssh port; 0 = not specified (ssh/~/.ssh/config decides)
 	Plan    bool          // dry-run: print the plan, do not connect
 	Timeout time.Duration // wall-clock cap for the remote scan process
 	MaxSize string        // optional --max-size passthrough (e.g. "500M")
@@ -31,15 +32,24 @@ type Deps struct {
 	Now      func() time.Time
 }
 
+// TargetLabel renders the target the way the operator should see it: with the port
+// when one was given, so what is confirmed and audited is what will be connected to.
+func TargetLabel(host string, port int) string {
+	if port == 0 {
+		return host
+	}
+	return fmt.Sprintf("%s:%d", host, port)
+}
+
 func targetString(o Options) string {
-	return fmt.Sprintf("%s path=%s mode=%s", o.Host, o.Path, o.Mode)
+	return fmt.Sprintf("%s path=%s mode=%s", TargetLabel(o.Host, o.Port), o.Path, o.Mode)
 }
 
 // PlanLines returns the human-readable dry-run plan.
 func PlanLines(o Options) []string {
 	return []string{
 		"Remote scan plan (recon-only, read-only on target):",
-		"  Target:  " + o.Host,
+		"  Target:  " + TargetLabel(o.Host, o.Port),
 		"  Path:    " + o.Path,
 		"  Mode:    " + o.Mode,
 		fmt.Sprintf("  Timeout: %ds", int(o.Timeout.Seconds())),
@@ -53,6 +63,9 @@ func validate(o Options) error {
 		return err
 	}
 	if err := ValidateMode(o.Mode); err != nil {
+		return err
+	}
+	if err := ValidatePort(o.Port); err != nil {
 		return err
 	}
 	if err := ValidateRemotePath(o.Path); err != nil {

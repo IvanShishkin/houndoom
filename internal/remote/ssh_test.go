@@ -8,7 +8,7 @@ import (
 )
 
 func TestSSHBaseArgsAreHardened(t *testing.T) {
-	args := sshBaseArgs("scan", "10.0.0.5")
+	args := sshBaseArgs("scan", "10.0.0.5", 0)
 	joined := strings.Join(args, " ")
 	// Must target scan@10.0.0.5 and never weaken host-key checking.
 	if !strings.Contains(joined, "scan@10.0.0.5") {
@@ -25,7 +25,7 @@ func TestSSHBaseArgsAreHardened(t *testing.T) {
 }
 
 func TestScpArgs(t *testing.T) {
-	args := scpArgs("scan", "10.0.0.5", "/local/bin", "/tmp/x/bin")
+	args := scpArgs("scan", "10.0.0.5", "/local/bin", "/tmp/x/bin", 0)
 	joined := strings.Join(args, " ")
 	if !strings.Contains(joined, "/local/bin") || !strings.Contains(joined, "scan@10.0.0.5:/tmp/x/bin") {
 		t.Errorf("scp args wrong: %v", args)
@@ -91,7 +91,7 @@ func TestUploadUsesSCP(t *testing.T) {
 }
 
 func TestScpFromArgs(t *testing.T) {
-	args := scpFromArgs("scan", "10.0.0.5", "/tmp/x/report.json", "/local/out")
+	args := scpFromArgs("scan", "10.0.0.5", "/tmp/x/report.json", "/local/out", 0)
 	joined := strings.Join(args, " ")
 	// Assert the source remote path is present
 	if !strings.Contains(joined, "scan@10.0.0.5:/tmp/x/report.json") {
@@ -152,7 +152,7 @@ func TestSSHIntegration(t *testing.T) {
 		t.Fatal("HD_SSH_HOST and HD_SSH_USER required")
 	}
 
-	sess, err := NewSSHConnector()(context.Background(), user, host)
+	sess, err := NewSSHConnector(0)(context.Background(), user, host)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -172,4 +172,86 @@ func TestSSHIntegration(t *testing.T) {
 		t.Fatalf("roundtrip failed: got=%q err=%v", got, err)
 	}
 	_, _, _ = sess.Run(context.Background(), "rm -f "+remotePath)
+}
+
+func TestSSHBaseArgsCarriesPort(t *testing.T) {
+	args := sshBaseArgs("scan", "10.0.0.5", 2222)
+	joined := strings.Join(args, " ")
+	if !strings.Contains(joined, "-p 2222") {
+		t.Errorf("ssh must receive -p <port>: %v", args)
+	}
+	// The port option belongs before the destination, like every other ssh option.
+	if args[len(args)-1] != "scan@10.0.0.5" {
+		t.Errorf("destination must stay last: %v", args)
+	}
+}
+
+func TestSSHBaseArgsUnchangedWithoutPort(t *testing.T) {
+	// Port 0 means "not set": the operator's ~/.ssh/config keeps deciding, so argv
+	// must be byte-for-byte what it was before the flag existed.
+	want := []string{"-o", "BatchMode=yes", "scan@10.0.0.5"}
+	got := sshBaseArgs("scan", "10.0.0.5", 0)
+	if len(got) != len(want) {
+		t.Fatalf("argv changed without a port: got %v, want %v", got, want)
+	}
+	for i := range want {
+		if got[i] != want[i] {
+			t.Fatalf("argv changed without a port: got %v, want %v", got, want)
+		}
+	}
+}
+
+func TestScpArgsCarriesPortAndKeepsPreserve(t *testing.T) {
+	args := scpArgs("scan", "10.0.0.5", "/local/bin", "/tmp/x/bin", 2222)
+	joined := strings.Join(args, " ")
+	// scp spells the port -P; lowercase -p is "preserve mode/timestamps" and must survive.
+	if !strings.Contains(joined, "-P 2222") {
+		t.Errorf("scp must receive -P <port>: %v", args)
+	}
+	if !hasArg(args, "-p") {
+		t.Errorf("scp must keep -p (preserve mode/timestamps): %v", args)
+	}
+}
+
+func TestScpFromArgsCarriesPort(t *testing.T) {
+	args := scpFromArgs("scan", "10.0.0.5", "/tmp/x/report.json", "/local/report.json", 2222)
+	if !strings.Contains(strings.Join(args, " "), "-P 2222") {
+		t.Errorf("scp download must receive -P <port>: %v", args)
+	}
+}
+
+func hasArg(args []string, want string) bool {
+	for _, a := range args {
+		if a == want {
+			return true
+		}
+	}
+	return false
+}
+
+func TestSessionPassesPortToSSHAndSCP(t *testing.T) {
+	fe := &fakeExec{}
+	s := &sshSession{user: "scan", host: "10.0.0.5", port: 2222, exec: fe.run}
+
+	if _, _, err := s.Run(context.Background(), "uname -m"); err != nil {
+		t.Fatal(err)
+	}
+	if err := s.Upload(context.Background(), []byte("ELF"), "/tmp/x/houndoom", 0o700); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := s.Download(context.Background(), "/tmp/x/report.json"); err != nil {
+		t.Fatal(err)
+	}
+
+	if len(fe.calls) != 3 {
+		t.Fatalf("expected ssh + scp up + scp down, got %v", fe.calls)
+	}
+	if !hasArg(fe.calls[0], "-p") || !hasArg(fe.calls[0], "2222") {
+		t.Errorf("ssh call lost the port: %v", fe.calls[0])
+	}
+	for _, call := range fe.calls[1:] {
+		if !hasArg(call, "-P") || !hasArg(call, "2222") {
+			t.Errorf("scp call lost the port: %v", call)
+		}
+	}
 }
