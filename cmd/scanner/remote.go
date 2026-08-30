@@ -67,7 +67,7 @@ material is never read by this command directly — it is provided by ssh-agent.
 				deps := remote.Deps{
 					Connect:  remote.NewSSHConnector(port),
 					Binaries: binaries.FS,
-					Audit:    remote.NewAuditLog(auditFile, operator, host),
+					Audit:    remote.NewAuditLog(auditFile, operator, remote.TargetLabel(host, port)),
 					Confirm:  func(target string) bool { return yes || confirmTarget(target) },
 					Now:      time.Now,
 				}
