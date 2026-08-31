@@ -258,3 +258,59 @@ func TestRunContinuesOnAuditWriteError(t *testing.T) {
 		t.Errorf("unexpected report content: %q", data)
 	}
 }
+
+func TestRunRejectsInvalidPortBeforeConnecting(t *testing.T) {
+	connected := false
+	deps := Deps{Connect: func(ctx context.Context, user, host string) (Session, error) {
+		connected = true
+		return nil, nil
+	}}
+	o := Options{Host: "scan@10.0.0.5", Path: "/var/www", Mode: "normal", Port: 70000}
+
+	if _, err := Run(context.Background(), o, deps); err == nil {
+		t.Fatal("expected an error for an out-of-range port")
+	}
+	if connected {
+		t.Error("must not connect when the port is invalid")
+	}
+}
+
+func TestPlanLinesShowPortOnlyWhenSet(t *testing.T) {
+	withPort := strings.Join(PlanLines(Options{Host: "scan@10.0.0.5", Path: "/var/www", Mode: "normal", Port: 2222}), "\n")
+	if !strings.Contains(withPort, "2222") {
+		t.Errorf("plan must disclose the port it will connect to: %s", withPort)
+	}
+	// Without a port the target line must look exactly as it did before the flag existed.
+	noPort := PlanLines(Options{Host: "scan@10.0.0.5", Path: "/var/www", Mode: "normal"})
+	for _, l := range noPort {
+		if strings.HasPrefix(strings.TrimSpace(l), "Target:") && strings.TrimSpace(l) != "Target:  scan@10.0.0.5" {
+			t.Errorf("target line changed when no port is set: %q", l)
+		}
+	}
+}
+
+func TestTargetLabelAppendsPort(t *testing.T) {
+	if got := TargetLabel("scan@10.0.0.5", 2222); got != "scan@10.0.0.5:2222" {
+		t.Errorf("labelled target must carry the port, got %q", got)
+	}
+	if got := TargetLabel("scan@10.0.0.5", 0); got != "scan@10.0.0.5" {
+		t.Errorf("labelled target must stay unchanged without a port, got %q", got)
+	}
+}
+
+func TestConfirmationShowsPort(t *testing.T) {
+	sess := &fakeSession{uploaded: map[string][]byte{}}
+	deps, _ := baseDeps(sess, true)
+	deps.Connect = func(ctx context.Context, user, host string) (Session, error) { return sess, nil }
+	var shown string
+	deps.Confirm = func(target string) bool { shown = target; return false }
+
+	o := Options{Host: "scan@10.0.0.5", Path: "/var/www", Mode: "normal", Port: 2222,
+		Output: filepath.Join(t.TempDir(), "r.json")}
+	if _, err := Run(context.Background(), o, deps); err == nil {
+		t.Fatal("expected abort when the operator declines")
+	}
+	if !strings.Contains(shown, "2222") {
+		t.Errorf("operator must confirm the actual port: %q", shown)
+	}
+}

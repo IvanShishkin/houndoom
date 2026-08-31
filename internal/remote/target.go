@@ -54,6 +54,17 @@ func ValidateRemotePath(path string) error {
 	return nil
 }
 
+// ValidatePort accepts 0 (meaning "not specified" - ssh decides) or a TCP port.
+func ValidatePort(port int) error {
+	if port == 0 {
+		return nil
+	}
+	if port < 1 || port > 65535 {
+		return fmt.Errorf("invalid ssh port %d: must be 1-65535", port)
+	}
+	return nil
+}
+
 // ParseUserHost splits "user@host" and validates both halves.
 func ParseUserHost(host string) (string, string, error) {
 	idx := strings.Index(host, "@")

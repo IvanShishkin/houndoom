@@ -89,3 +89,17 @@ func TestSelectBinary(t *testing.T) {
 		t.Error("expected error when binary not bundled")
 	}
 }
+
+func TestValidatePort(t *testing.T) {
+	// 0 means "not specified" and must stay allowed: the flag is optional.
+	for _, ok := range []int{0, 1, 22, 2222, 65535} {
+		if err := ValidatePort(ok); err != nil {
+			t.Errorf("port %d must be accepted: %v", ok, err)
+		}
+	}
+	for _, bad := range []int{-1, 65536, 100000} {
+		if err := ValidatePort(bad); err == nil {
+			t.Errorf("port %d must be rejected", bad)
+		}
+	}
+}

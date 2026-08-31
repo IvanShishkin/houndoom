@@ -22,6 +22,7 @@ func remoteScanCmd() *cobra.Command {
 	var (
 		host    string
 		path    string
+		port    int
 		mode    string
 		output  string
 		plan    bool
@@ -39,7 +40,7 @@ run a read-only scan, and collect the JSON report to a per-engagement directory.
 Authorization is by SSH key possession; there is no in-app allowlist. SSH key
 material is never read by this command directly — it is provided by ssh-agent.`,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			opts := remote.Options{Host: host, Path: path, Mode: mode, Plan: plan, Timeout: timeout, MaxSize: maxSize}
+			opts := remote.Options{Host: host, Path: path, Port: port, Mode: mode, Plan: plan, Timeout: timeout, MaxSize: maxSize}
 
 			// Resolve output path: explicit --output overrides the per-engagement dir.
 			if !plan {
@@ -64,9 +65,9 @@ material is never read by this command directly — it is provided by ssh-agent.
 				defer auditFile.Close()
 
 				deps := remote.Deps{
-					Connect:  remote.NewSSHConnector(),
+					Connect:  remote.NewSSHConnector(port),
 					Binaries: binaries.FS,
-					Audit:    remote.NewAuditLog(auditFile, operator, host),
+					Audit:    remote.NewAuditLog(auditFile, operator, remote.TargetLabel(host, port)),
 					Confirm:  func(target string) bool { return yes || confirmTarget(target) },
 					Now:      time.Now,
 				}
@@ -95,6 +96,7 @@ material is never read by this command directly — it is provided by ssh-agent.
 
 	cmd.Flags().StringVar(&host, "host", "", "Target in user@host form (required)")
 	cmd.Flags().StringVar(&path, "path", "", "Absolute path on the target to scan (required)")
+	cmd.Flags().IntVar(&port, "port", 0, "SSH port on the target (default: whatever ssh resolves, i.e. ~/.ssh/config or 22)")
 	cmd.Flags().StringVar(&mode, "mode", "normal", "Scan mode: fast, normal, paranoid")
 	cmd.Flags().StringVarP(&output, "output", "o", "", "Optional report path override (default: per-engagement directory)")
 	cmd.Flags().BoolVar(&plan, "plan", false, "Print the execution plan without connecting")

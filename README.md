@@ -135,6 +135,9 @@ houndoom remote-scan --host scan@10.0.0.5 --path /var/www --mode paranoid --plan
 # Run the recon-only remote scan (asks for confirmation, then connects)
 houndoom remote-scan --host scan@10.0.0.5 --path /var/www --mode paranoid
 
+# Target on a non-standard SSH port (only needed where ~/.ssh/config cannot be used)
+houndoom remote-scan --host scan@10.0.0.5 --path /var/www --port 2222
+
 # Stored reports/audit logs live under ~/.houndoom/engagements/<target>-<ts>/
 houndoom engagements purge --older-than 720h   # retention cleanup (default 30 days)
 ```
@@ -147,7 +150,10 @@ runs `remote-scan`, and analyzes the report interactively.
   upload dir that is removed on every path (including failures).
 - **SSH keys via ssh-agent only** — there is no `--key` flag; the system `ssh`/`scp`
   clients are used, so `~/.ssh/config` (ProxyJump/bastions, ports, per-host keys)
-  works out of the box. Key material is never read or logged.
+  works out of the box. Key material is never read or logged. `--port` exists for
+  headless environments (CI, containers) where `~/.ssh` is not writable, so a config
+  entry cannot be created; without the flag the argv is unchanged and `~/.ssh/config`
+  keeps deciding.
 - **Host-key verification is enforced** (never weakened).
 - **Resource limits** — the remote scan runs under `nice` + `timeout` to protect
   client production (`--timeout`, default 1h; optional `--max-size`).
@@ -197,6 +203,7 @@ houndoom remote-scan [flags]
 
   --host string       Target in user@host form (required)
   --path string       Absolute path on the target to scan
+  --port int          SSH port on the target (default: whatever ssh resolves)
   --mode string       fast|normal|paranoid (default "normal")
   -o, --output string Report path override (default: per-engagement directory)
   --plan              Print the execution plan without connecting
